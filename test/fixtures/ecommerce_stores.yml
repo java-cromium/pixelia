@@ -1,0 +1,15 @@
+acme_shopify:
+  project: acme_website
+  platform: shopify
+  store_url: https://acme.myshopify.com
+  api_key: shpka_test1234567890
+  api_secret: shpss_secret1234567890
+  client: acme
+
+globex_woo:
+  project: globex_store
+  platform: woocommerce
+  store_url: https://store.globex.com
+  api_key: ck_test1234567890
+  api_secret: cs_secret1234567890
+  client: globex

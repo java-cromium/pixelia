@@ -1,0 +1,26 @@
+<h2>New Lead Received</h2>
+
+<p>A new lead has been submitted on the Pixelia website.</p>
+
+<table style="border-collapse: collapse; width: 100%; max-width: 500px;">
+  <tr>
+    <td style="padding: 8px 12px; font-weight: bold; color: #374151; border-bottom: 1px solid #e5e7eb;">Name</td>
+    <td style="padding: 8px 12px; color: #6b7280; border-bottom: 1px solid #e5e7eb;"><%= @lead.first_name %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px 12px; font-weight: bold; color: #374151; border-bottom: 1px solid #e5e7eb;">Email</td>
+    <td style="padding: 8px 12px; color: #6b7280; border-bottom: 1px solid #e5e7eb;"><%= @lead.email %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px 12px; font-weight: bold; color: #374151; border-bottom: 1px solid #e5e7eb;">Project Type</td>
+    <td style="padding: 8px 12px; color: #6b7280; border-bottom: 1px solid #e5e7eb;"><%= @lead.project_type %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px 12px; font-weight: bold; color: #374151;">Submitted</td>
+    <td style="padding: 8px 12px; color: #6b7280;"><%= @lead.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
+  </tr>
+</table>
+
+<p style="margin-top: 20px;">
+  <a href="<%= admin_lead_url(@lead) %>" style="display: inline-block; padding: 10px 20px; background-color: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600;">View Lead in Admin</a>
+</p>

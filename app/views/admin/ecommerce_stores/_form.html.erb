@@ -1,0 +1,52 @@
+<%= form_with model: [:admin, store], class: "space-y-6" do |f| %>
+  <% if store.errors.any? %>
+    <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+      <ul class="list-disc list-inside text-sm text-red-400 space-y-1">
+        <% store.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :platform, class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= f.select :platform, options_for_select(EcommerceStore::PLATFORMS.map { |p| [p.capitalize, p] }, store.platform), { include_blank: "Select platform..." }, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+  </div>
+
+  <div>
+    <%= f.label :store_url, "Store URL", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= f.url_field :store_url, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow", placeholder: "https://mystore.myshopify.com" %>
+  </div>
+
+  <div>
+    <%= f.label :project_id, "Project", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= f.select :project_id, options_for_select(ActsAsTenant.without_tenant { Project.includes(:client).order(:name).map { |p| ["#{p.name} (#{p.client.name})", p.id] } }, store.project_id), { include_blank: "Select project..." }, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+  </div>
+
+  <div>
+    <%= f.label :client_id, "Client", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= f.select :client_id, options_for_select(Client.order(:name).pluck(:name, :id), store.client_id), { include_blank: "Select client..." }, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+  </div>
+
+  <div class="border-t border-slate-700/50 pt-6">
+    <h3 class="text-sm font-bold text-slate-50 mb-1">API Credentials</h3>
+    <p class="text-xs text-slate-500 mb-4">Credentials are encrypted at rest using Active Record Encryption.</p>
+
+    <div class="space-y-4">
+      <div>
+        <%= f.label :api_key, "API Key / Access Token", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+        <%= f.text_field :api_key, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow font-mono text-sm", placeholder: store.persisted? ? "Leave blank to keep current" : "shpat_xxxxxxxxxxxxx", autocomplete: "off" %>
+      </div>
+
+      <div>
+        <%= f.label :api_secret, "API Secret / Consumer Secret", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+        <%= f.text_field :api_secret, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow font-mono text-sm", placeholder: store.persisted? ? "Leave blank to keep current" : "cs_xxxxxxxxxxxxx", autocomplete: "off" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-2">
+    <%= f.submit class: "px-8 py-3 bg-indigo-600 text-slate-50 font-semibold rounded-xl shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 transition-all duration-200 cursor-pointer" %>
+  </div>
+<% end %>

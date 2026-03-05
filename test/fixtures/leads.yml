@@ -1,0 +1,11 @@
+new_lead:
+  first_name: Maria
+  email: maria@example.com
+  project_type: Sitio Web
+  status: new
+
+contacted_lead:
+  first_name: Carlos
+  email: carlos@example.com
+  project_type: Tienda Online (E-Commerce)
+  status: contacted

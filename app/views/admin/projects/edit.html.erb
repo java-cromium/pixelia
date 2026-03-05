@@ -1,0 +1,14 @@
+<% content_for(:title) { "Edit #{@project.name} — Admin — Pixelia" } %>
+
+<div class="p-8">
+  <div class="mb-6">
+    <a href="<%= admin_project_path(@project) %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">&larr; Back to <%= @project.name %></a>
+  </div>
+
+  <div class="max-w-xl">
+    <h1 class="text-3xl font-bold text-slate-50 mb-8">Edit Project</h1>
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+      <%= render "form", project: @project %>
+    </div>
+  </div>
+</div>

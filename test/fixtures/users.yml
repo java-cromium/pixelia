@@ -1,0 +1,17 @@
+admin:
+  email: admin@pixelia.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  role: 0
+  client:
+
+client_user_one:
+  email: user@acme.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  role: 1
+  client: acme
+
+client_user_two:
+  email: user@globex.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  role: 1
+  client: globex

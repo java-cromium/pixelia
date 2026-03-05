@@ -1,0 +1,57 @@
+<% content_for(:title) { "#{@project.name} — Admin — Pixelia" } %>
+
+<div class="p-8">
+  <div class="mb-6">
+    <a href="<%= admin_projects_path %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">&larr; Back to Projects</a>
+  </div>
+
+  <div class="flex items-start justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-50"><%= @project.name %></h1>
+      <p class="mt-1 text-slate-400">
+        <a href="<%= admin_client_path(@project.client) %>" class="text-cyan-400 hover:text-cyan-300 font-medium"><%= @project.client.name %></a>
+        · <%= @project.project_type %>
+      </p>
+    </div>
+    <div class="flex gap-3">
+      <a href="<%= edit_admin_project_path(@project) %>" class="px-5 py-2.5 bg-slate-800 border border-slate-700 text-sm font-semibold text-slate-300 rounded-xl hover:bg-slate-700 transition-colors">Edit</a>
+      <%= button_to "Delete", admin_project_path(@project), method: :delete, data: { turbo_confirm: "Delete project #{@project.name}?" }, class: "px-5 py-2.5 bg-red-500/10 border border-red-500/30 text-sm font-semibold text-red-400 rounded-xl hover:bg-red-500/20 transition-colors cursor-pointer" %>
+    </div>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-6 mb-8">
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+      <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Status</p>
+      <p class="mt-2 text-lg font-bold text-slate-50"><%= @project.status&.humanize %></p>
+    </div>
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+      <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Launch Date</p>
+      <p class="mt-2 text-lg font-bold text-slate-50"><%= @project.launch_date&.strftime("%B %d, %Y") || "TBD" %></p>
+    </div>
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+      <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">E-Commerce Stores</p>
+      <p class="mt-2 text-lg font-bold text-slate-50"><%= @ecommerce_stores.count %></p>
+    </div>
+  </div>
+
+  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+    <h2 class="text-lg font-bold text-slate-50 mb-4">Linked E-Commerce Stores</h2>
+    <% if @ecommerce_stores.any? %>
+      <div class="divide-y divide-slate-700/50">
+        <% @ecommerce_stores.each do |store| %>
+          <div class="py-4 flex items-center justify-between">
+            <div>
+              <p class="font-medium text-slate-50"><%= store.platform %></p>
+              <p class="text-sm text-slate-500"><%= store.store_url %></p>
+            </div>
+            <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= store.api_key.present? ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-500/15 text-amber-400' %>">
+              <%= store.api_key.present? ? "Connected" : "Keys Missing" %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-slate-500">No e-commerce stores linked to this project.</p>
+    <% end %>
+  </div>
+</div>

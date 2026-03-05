@@ -1,0 +1,49 @@
+<% content_for(:title) { "Leads — Admin — Pixelia" } %>
+
+<div class="p-8">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-bold text-slate-50">Leads</h1>
+  </div>
+
+  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 overflow-hidden">
+    <table class="w-full">
+      <thead>
+        <tr class="text-left text-xs font-medium text-slate-500 uppercase tracking-wider bg-slate-800 border-b border-slate-700">
+          <th class="px-6 py-3">Name</th>
+          <th class="px-6 py-3">Email</th>
+          <th class="px-6 py-3">Project Type</th>
+          <th class="px-6 py-3">Status</th>
+          <th class="px-6 py-3">Date</th>
+          <th class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-700/50">
+        <% @leads.each do |lead| %>
+          <tr class="hover:bg-slate-700/30 transition-colors">
+            <td class="px-6 py-4 font-medium text-slate-50"><%= lead.first_name %></td>
+            <td class="px-6 py-4 text-slate-400"><%= lead.email %></td>
+            <td class="px-6 py-4 text-slate-400"><%= lead.project_type %></td>
+            <td class="px-6 py-4">
+              <span class="text-xs font-medium px-2.5 py-1 rounded-full
+                <%= case lead.status
+                    when 'new' then 'bg-cyan-500/15 text-cyan-400'
+                    when 'contacted' then 'bg-amber-500/15 text-amber-400'
+                    when 'converted' then 'bg-emerald-500/15 text-emerald-400'
+                    else 'bg-slate-700 text-slate-400'
+                    end %>">
+                <%= lead.status&.capitalize %>
+              </span>
+            </td>
+            <td class="px-6 py-4 text-sm text-slate-500"><%= lead.created_at.strftime("%b %d, %Y") %></td>
+            <td class="px-6 py-4 text-right space-x-3">
+              <a href="<%= admin_lead_path(lead) %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">View</a>
+              <%= button_to "Delete", admin_lead_path(lead), method: :delete, data: { turbo_confirm: "Delete this lead?" }, class: "text-sm text-red-400 hover:text-red-300 font-medium bg-transparent border-0 cursor-pointer inline" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= render "shared/pagination" %>
+</div>

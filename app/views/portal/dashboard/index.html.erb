@@ -1,0 +1,190 @@
+<% content_for(:title) { "Dashboard — Pixelia" } %>
+
+<div class="min-h-screen bg-slate-900">
+  <!-- Top Navigation -->
+  <nav class="bg-slate-950 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <%= image_tag "logo-landscape.png", alt: "Pixelia", class: "h-12 w-auto" %>
+        <span class="text-xs font-medium text-cyan-400 bg-cyan-500/10 px-2 py-1 rounded-full">Portal</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="<%= projects_path %>" class="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors">Projects</a>
+        <a href="<%= ecommerce_stores_path %>" class="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors">Stores</a>
+        <% if current_user %>
+          <span class="text-sm text-slate-500"><%= current_user.email %></span>
+          <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm font-medium text-red-400 hover:text-red-300 transition-colors" %>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="max-w-7xl mx-auto px-6 py-10">
+    <div class="mb-10">
+      <h1 class="text-3xl font-bold text-slate-50">Welcome back<%= current_user ? ", #{current_user.email}" : "" %></h1>
+      <p class="mt-2 text-slate-400">Here's an overview of your digital presence.</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+        <p class="text-sm font-medium text-slate-500">Active Projects</p>
+        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @projects&.count || 0 %></p>
+      </div>
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+        <p class="text-sm font-medium text-slate-500">E-Commerce Stores</p>
+        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @stores&.count || 0 %></p>
+      </div>
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+        <p class="text-sm font-medium text-slate-500">Connected Stores</p>
+        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @stores&.select { |s| s.api_key.present? && s.api_secret.present? }&.count || 0 %></p>
+      </div>
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+        <p class="text-sm font-medium text-slate-500">Platforms</p>
+        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @stores_by_platform&.keys&.count || 0 %></p>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <% if @client %>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+        <h2 class="text-lg font-bold text-slate-50 mb-6">Projects by Status</h2>
+        <% if @projects_by_status.present? && @projects_by_status.any? %>
+          <%= pie_chart @projects_by_status,
+              colors: ["#4F46E5", "#06B6D4", "#10B981", "#F59E0B", "#64748B"],
+              legend: "bottom",
+              donut: true,
+              library: {
+                backgroundColor: "transparent",
+                legend: { labels: { color: "#94A3B8" } }
+              } %>
+        <% else %>
+          <p class="text-slate-500 text-sm text-center py-8">No project data yet.</p>
+        <% end %>
+      </div>
+
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+        <h2 class="text-lg font-bold text-slate-50 mb-6">Projects by Type</h2>
+        <% if @projects_by_type.present? && @projects_by_type.any? %>
+          <%= bar_chart @projects_by_type,
+              colors: ["#06B6D4"],
+              library: {
+                backgroundColor: "transparent",
+                scales: {
+                  x: { ticks: { color: "#94A3B8" }, grid: { color: "#1E293B" } },
+                  y: { ticks: { color: "#94A3B8", stepSize: 1 }, grid: { color: "#1E293B" } }
+                }
+              } %>
+        <% else %>
+          <p class="text-slate-500 text-sm text-center py-8">No project data yet.</p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+        <h2 class="text-lg font-bold text-slate-50 mb-6">Projects Timeline (Last 6 Months)</h2>
+        <% if @projects_timeline.present? && @projects_timeline.any? %>
+          <%= area_chart @projects_timeline,
+              colors: ["#4F46E5"],
+              library: {
+                backgroundColor: "transparent",
+                scales: {
+                  x: { ticks: { color: "#94A3B8" }, grid: { color: "#1E293B" } },
+                  y: { ticks: { color: "#94A3B8", stepSize: 1 }, grid: { color: "#1E293B" } }
+                },
+                elements: { line: { tension: 0.4 } }
+              } %>
+        <% else %>
+          <p class="text-slate-500 text-sm text-center py-8">No timeline data yet.</p>
+        <% end %>
+      </div>
+
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+        <h2 class="text-lg font-bold text-slate-50 mb-6">Stores by Platform</h2>
+        <% if @stores_by_platform.present? && @stores_by_platform.any? %>
+          <%= pie_chart @stores_by_platform,
+              colors: ["#10B981", "#4F46E5"],
+              legend: "bottom",
+              donut: true,
+              library: {
+                backgroundColor: "transparent",
+                legend: { labels: { color: "#94A3B8" } }
+              } %>
+        <% else %>
+          <p class="text-slate-500 text-sm text-center py-8">No stores connected yet.</p>
+        <% end %>
+      </div>
+    </div>
+    <% end %>
+
+    <!-- Quick Actions -->
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+        <h2 class="text-lg font-bold text-slate-50 mb-4">Recent Projects</h2>
+        <% recent_projects = @projects&.order(created_at: :desc)&.limit(5) || [] %>
+        <% if recent_projects.any? %>
+          <ul class="divide-y divide-slate-700/50">
+            <% recent_projects.each do |project| %>
+              <li class="py-3 flex items-center justify-between">
+                <div>
+                  <a href="<%= project_path(project) %>" class="font-medium text-slate-50 hover:text-cyan-400 transition-colors"><%= project.name %></a>
+                  <p class="text-sm text-slate-500"><%= project.project_type %></p>
+                </div>
+                <span class="text-xs font-medium px-3 py-1 rounded-full
+                  <%= project.status == 'active' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-slate-700 text-slate-400' %>">
+                  <%= project.status&.capitalize || "N/A" %>
+                </span>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-slate-500 text-sm">No projects yet. Your team will set these up for you.</p>
+        <% end %>
+      </div>
+
+      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
+        <h2 class="text-lg font-bold text-slate-50 mb-4">Platform Status</h2>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-400">Website</span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/15 px-3 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span> Online
+            </span>
+          </div>
+          <% if @stores.present? %>
+            <% @stores.each do |store| %>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-slate-400"><%= store.platform.capitalize %> — <%= store.store_url.gsub(%r{https?://}, '') %></span>
+                <% if store.connected? %>
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/15 px-3 py-1 rounded-full">
+                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span> Connected
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium text-amber-400 bg-amber-500/15 px-3 py-1 rounded-full">
+                    <span class="w-1.5 h-1.5 bg-amber-400 rounded-full"></span> Keys Missing
+                  </span>
+                <% end %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-slate-400">E-Commerce Sync</span>
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-700 px-3 py-1 rounded-full">
+                <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Not Connected
+              </span>
+            </div>
+          <% end %>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-slate-400">Marketing Campaigns</span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-700 px-3 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Pending Setup
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
