@@ -63,7 +63,7 @@ gem "chartkick"
 gem "groupdate"
 
 # Pagination
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.4"
 
 # Pin minitest to 5.x (minitest 6 has breaking changes with Rails 8 test runner)
 gem "minitest", "~> 5.25"
