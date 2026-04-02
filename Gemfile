@@ -66,7 +66,7 @@ gem "groupdate"
 gem "pagy", "~> 9.0"
 
 # Pin minitest to 5.x (minitest 6 has breaking changes with Rails 8 test runner)
-gem "minitest", "~> 5.25"
+gem "minitest", "~> 6.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
