@@ -9,8 +9,8 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "client_user cannot access admin dashboard" do
-    sign_in users(:client_user_one)
+  test "owner cannot access admin dashboard" do
+    sign_in users(:owner_one)
     get admin_root_url
     assert_redirected_to root_url
   end

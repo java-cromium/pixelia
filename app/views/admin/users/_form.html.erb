@@ -33,8 +33,8 @@
   </div>
 
   <div>
-    <%= f.label :client_id, "Client", class: "block text-sm font-semibold text-slate-300 mb-2" %>
-    <%= f.select :client_id, options_for_select(Client.order(:name).pluck(:name, :id), user.client_id), { include_blank: "None (Super Admin)" }, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+    <%= f.label :account_id, "Account", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= f.select :account_id, options_for_select(Account.order(:name).pluck(:name, :id), user.account_id), { include_blank: "None (Super Admin)" }, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
   </div>
 
   <div class="pt-2">

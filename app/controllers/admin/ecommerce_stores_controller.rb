@@ -2,7 +2,7 @@ class Admin::EcommerceStoresController < Admin::BaseController
   before_action :set_store, only: [:show, :edit, :update, :destroy]
 
   def index
-    @pagy, @stores = pagy(ActsAsTenant.without_tenant { EcommerceStore.includes(:project, project: :client).order(:platform) })
+    @pagy, @stores = pagy(ActsAsTenant.without_tenant { EcommerceStore.includes(:account).order(:platform) })
   end
 
   def show
@@ -52,6 +52,6 @@ class Admin::EcommerceStoresController < Admin::BaseController
   end
 
   def store_params
-    params.require(:ecommerce_store).permit(:project_id, :client_id, :platform, :store_url, :api_key, :api_secret)
+    params.require(:ecommerce_store).permit(:account_id, :platform, :store_url, :api_key, :api_secret)
   end
 end

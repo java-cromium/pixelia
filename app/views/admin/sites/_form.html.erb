@@ -1,0 +1,39 @@
+<div class="space-y-6">
+  <% if site.errors.any? %>
+    <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+      <ul class="text-red-400 text-sm space-y-1">
+        <% site.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :account_id, "Account", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= form.collection_select :account_id, @accounts, :id, :name, { prompt: "Select an account..." }, class: "w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" %>
+  </div>
+
+  <div>
+    <%= form.label :name, class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= form.text_field :name, placeholder: "My Website", class: "w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" %>
+  </div>
+
+  <div>
+    <%= form.label :subdomain, class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <div class="flex items-center gap-2">
+      <%= form.text_field :subdomain, placeholder: "my-site", class: "flex-1 px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono" %>
+      <span class="text-slate-500 text-sm">.pixelia.com</span>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :custom_domain, "Custom Domain (optional)", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= form.text_field :custom_domain, placeholder: "www.example.com", class: "w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= form.check_box :published, class: "w-4 h-4 rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-indigo-500" %>
+    <%= form.label :published, "Published", class: "text-sm font-medium text-slate-300" %>
+  </div>
+</div>

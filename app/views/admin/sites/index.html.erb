@@ -1,0 +1,44 @@
+<% content_for(:title) { "Sites — Admin — Pixelia" } %>
+
+<div class="p-8">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-bold text-slate-50">Sites</h1>
+    <a href="<%= new_admin_site_path %>" class="px-5 py-2.5 bg-indigo-600 text-slate-50 text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-colors">+ New Site</a>
+  </div>
+
+  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 overflow-hidden">
+    <table class="w-full">
+      <thead>
+        <tr class="text-left text-xs font-medium text-slate-500 uppercase tracking-wider bg-slate-800 border-b border-slate-700">
+          <th class="px-6 py-3">Name</th>
+          <th class="px-6 py-3">Account</th>
+          <th class="px-6 py-3">Domain</th>
+          <th class="px-6 py-3">Pages</th>
+          <th class="px-6 py-3">Status</th>
+          <th class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-700/50">
+        <% @sites.each do |site| %>
+          <tr class="hover:bg-slate-700/30 transition-colors">
+            <td class="px-6 py-4 font-medium text-slate-50"><%= site.name %></td>
+            <td class="px-6 py-4 text-slate-400"><%= site.account.name %></td>
+            <td class="px-6 py-4 text-slate-400 text-sm font-mono"><%= site.domain_display || "—" %></td>
+            <td class="px-6 py-4 text-slate-400"><%= site.pages.size %></td>
+            <td class="px-6 py-4">
+              <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= site.published? ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-500/15 text-amber-400' %>">
+                <%= site.published? ? "Published" : "Draft" %>
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right space-x-3">
+              <a href="<%= admin_site_path(site) %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">View</a>
+              <a href="<%= edit_admin_site_path(site) %>" class="text-sm text-slate-400 hover:text-slate-300 font-medium">Edit</a>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= render "shared/pagination" %>
+</div>

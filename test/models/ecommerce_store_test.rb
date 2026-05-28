@@ -25,8 +25,7 @@ class EcommerceStoreTest < ActiveSupport::TestCase
 
   test "connected? returns true when keys present" do
     store = EcommerceStore.new(
-      project: projects(:acme_website),
-      client: clients(:acme),
+      account: accounts(:acme),
       platform: "shopify",
       store_url: "https://test.myshopify.com",
       api_key: "test_key_123",
@@ -37,8 +36,7 @@ class EcommerceStoreTest < ActiveSupport::TestCase
 
   test "connected? returns false when keys missing" do
     store = EcommerceStore.new(
-      project: projects(:acme_website),
-      client: clients(:acme),
+      account: accounts(:acme),
       platform: "shopify",
       store_url: "https://test.myshopify.com",
       api_key: nil,

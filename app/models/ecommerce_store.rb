@@ -1,7 +1,7 @@
 class EcommerceStore < ApplicationRecord
-  belongs_to :project
+  belongs_to :account
 
-  acts_as_tenant(:client)
+  acts_as_tenant(:account)
 
   encrypts :api_key, :api_secret
 

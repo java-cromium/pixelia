@@ -5,17 +5,17 @@
 
   <!-- Stats -->
   <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
-    <a href="<%= admin_clients_path %>" class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-indigo-500/40 hover:bg-slate-800 transition-all">
-      <p class="text-sm font-medium text-slate-400">Clients</p>
-      <p class="mt-2 text-3xl font-bold text-slate-50"><%= @clients_count %></p>
+    <a href="<%= admin_accounts_path %>" class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-indigo-500/40 hover:bg-slate-800 transition-all">
+      <p class="text-sm font-medium text-slate-400">Accounts</p>
+      <p class="mt-2 text-3xl font-bold text-slate-50"><%= @accounts_count %></p>
     </a>
     <a href="<%= admin_users_path %>" class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-indigo-500/40 hover:bg-slate-800 transition-all">
       <p class="text-sm font-medium text-slate-400">Users</p>
       <p class="mt-2 text-3xl font-bold text-slate-50"><%= @users_count %></p>
     </a>
-    <a href="<%= admin_projects_path %>" class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-indigo-500/40 hover:bg-slate-800 transition-all">
-      <p class="text-sm font-medium text-slate-400">Projects</p>
-      <p class="mt-2 text-3xl font-bold text-slate-50"><%= @projects_count %></p>
+    <a href="<%= admin_sites_path %>" class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-indigo-500/40 hover:bg-slate-800 transition-all">
+      <p class="text-sm font-medium text-slate-400">Sites</p>
+      <p class="mt-2 text-3xl font-bold text-slate-50"><%= @sites_count %></p>
     </a>
     <a href="<%= admin_leads_path %>" class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-cyan-500/40 hover:bg-slate-800 transition-all">
       <p class="text-sm font-medium text-slate-400">Leads</p>
@@ -42,8 +42,8 @@
       <%= pie_chart @leads_by_type, colors: ["#4f46e5", "#06b6d4", "#8b5cf6", "#f59e0b", "#10b981", "#ef4444"], donut: true, library: { plugins: { legend: { labels: { color: "#94a3b8" } } } } %>
     </div>
     <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
-      <h2 class="text-lg font-bold text-slate-50 mb-4">Projects by Status</h2>
-      <%= bar_chart @projects_by_status, colors: ["#06b6d4"], library: { plugins: { legend: { display: false } }, scales: { x: { ticks: { color: "#94a3b8" }, grid: { color: "#1e293b" } }, y: { ticks: { color: "#94a3b8" }, grid: { color: "#1e293b" } } } } %>
+      <h2 class="text-lg font-bold text-slate-50 mb-4">Stores by Platform</h2>
+      <%= pie_chart @stores_by_platform, colors: ["#06b6d4", "#8b5cf6", "#10b981"], donut: true, library: { plugins: { legend: { labels: { color: "#94a3b8" } } } } %>
     </div>
   </div>
 

@@ -21,3 +21,6 @@ application.register("dropdown", DropdownController)
 
 import ClipboardController from "./clipboard_controller"
 application.register("clipboard", ClipboardController)
+
+import GrapejsEditorController from "./grapesjs_editor_controller"
+application.register("grapesjs-editor", GrapejsEditorController)

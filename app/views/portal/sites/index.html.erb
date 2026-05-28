@@ -1,0 +1,40 @@
+<% content_for(:title) { "Sites — Pixelia" } %>
+
+<div class="p-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-50">Sites</h1>
+    <p class="mt-1 text-slate-400">Your published websites and landing pages.</p>
+  </div>
+
+  <% if @sites.any? %>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @sites.each do |site| %>
+        <a href="<%= portal_site_path(site) %>" class="block bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-200">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-cyan-500/15 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-50"><%= site.name %></h3>
+              <p class="text-xs text-slate-500"><%= site.domain_display || "No domain" %></p>
+            </div>
+          </div>
+          <div class="pt-4 border-t border-slate-700/50 flex items-center justify-between">
+            <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= site.published? ? 'bg-emerald-500/15 text-emerald-400' : 'bg-slate-700 text-slate-400' %>">
+              <%= site.published? ? "Published" : "Draft" %>
+            </span>
+            <span class="text-xs text-slate-500"><%= site.pages.count %> pages</span>
+          </div>
+        </a>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-16 text-center">
+      <div class="w-16 h-16 bg-cyan-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+      </div>
+      <h3 class="text-lg font-semibold text-slate-50">No sites yet</h3>
+      <p class="mt-2 text-slate-500 text-sm">Your websites will appear here once created.</p>
+    </div>
+  <% end %>
+</div>

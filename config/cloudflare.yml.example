@@ -1,0 +1,19 @@
+# Cloudflare for SaaS (Custom Hostnames) Configuration
+# =====================================================
+#
+# Prerequisites:
+# 1. Add your zone to Cloudflare (e.g. pixelia.com)
+# 2. Enable "Cloudflare for SaaS" on the zone (SSL/TLS > Custom Hostnames)
+# 3. Create a fallback origin record (e.g. proxy-fallback.pixelia.com -> your server IP)
+# 4. Create a CNAME target (e.g. customers.pixelia.com -> proxy-fallback.pixelia.com)
+# 5. Create an API token with "Custom Hostnames" edit permissions for the zone
+#
+# Environment Variables:
+# CLOUDFLARE_API_TOKEN     - Bearer token with Custom Hostnames edit permissions
+# CLOUDFLARE_ZONE_ID       - Zone ID (found on the Cloudflare dashboard overview page)
+# CLOUDFLARE_CNAME_TARGET  - The CNAME target your customers point their domain to
+#
+# Example .env:
+# CLOUDFLARE_API_TOKEN=your_api_token_here
+# CLOUDFLARE_ZONE_ID=your_zone_id_here
+# CLOUDFLARE_CNAME_TARGET=customers.pixelia.com

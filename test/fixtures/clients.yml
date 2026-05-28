@@ -1,9 +1,0 @@
-acme:
-  name: Acme Corp
-  industry: Technology
-  status: active
-
-globex:
-  name: Globex Inc
-  industry: Retail
-  status: active

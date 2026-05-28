@@ -55,8 +55,17 @@ gem "redis"
 # E-Commerce integrations (lightweight HTTP client for Shopify & WooCommerce REST APIs)
 gem "httparty"
 
+# Payments & Subscriptions
+gem "pay", "~> 7.3"
+gem "stripe", "~> 12.0"
+
 # Authorization
 gem "pundit"
+
+# Google Ads API
+gem "google-ads-googleads", "~> 31.0"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 
 # Charts & analytics
 gem "chartkick"

@@ -1,0 +1,32 @@
+<div class="space-y-6">
+  <% if page.errors.any? %>
+    <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+      <ul class="text-red-400 text-sm space-y-1">
+        <% page.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= form.text_field :title, placeholder: "Home", class: "w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" %>
+  </div>
+
+  <div>
+    <%= form.label :slug, class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= form.text_field :slug, placeholder: "home (leave blank to auto-generate)", class: "w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-mono" %>
+    <p class="text-xs text-slate-500 mt-1">Leave blank to auto-generate from title</p>
+  </div>
+
+  <div>
+    <%= form.label :status, class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= form.select :status, [["Draft", "draft"], ["Published", "published"]], {}, class: "w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" %>
+  </div>
+
+  <div>
+    <%= form.label :position, "Sort Order", class: "block text-sm font-semibold text-slate-300 mb-2" %>
+    <%= form.number_field :position, class: "w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" %>
+  </div>
+</div>

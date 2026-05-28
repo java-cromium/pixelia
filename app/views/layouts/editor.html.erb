@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Page Editor — Pixelia" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <style>
+      /* GrapeJS theme overrides for Pixelia dark UI */
+      .gjs-one-bg { background-color: #0f172a !important; }
+      .gjs-two-color { color: #94a3b8 !important; }
+      .gjs-three-bg { background-color: #1e293b !important; }
+      .gjs-four-color, .gjs-four-color-h:hover { color: #6366f1 !important; }
+      .gjs-cv-canvas { background-color: #1e293b !important; }
+      .gjs-block { color: #94a3b8 !important; border: 1px solid #334155 !important; border-radius: 8px !important; }
+      .gjs-block:hover { border-color: #6366f1 !important; color: #f8fafc !important; }
+      .gjs-category-title, .gjs-layer-title, .gjs-sm-sector-title { background-color: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+      .gjs-field { background-color: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+      .gjs-field input, .gjs-field select, .gjs-field textarea { color: #e2e8f0 !important; }
+      .gjs-radio-item label { color: #94a3b8 !important; }
+      .gjs-clm-tags .gjs-clm-tag { background-color: #6366f1 !important; color: #fff !important; }
+      .gjs-pn-panel { background-color: #0f172a !important; }
+      .gjs-sm-property .gjs-sm-label { color: #94a3b8 !important; }
+    </style>
+  </head>
+
+  <body class="bg-slate-900 overflow-hidden" data-turbo="false">
+    <%= yield %>
+  </body>
+</html>

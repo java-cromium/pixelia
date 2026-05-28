@@ -1,0 +1,16 @@
+<% content_for(:title) { "New Campaign — Pixelia" } %>
+
+<div class="p-8">
+  <div class="mb-6">
+    <a href="<%= portal_google_campaigns_path %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">&larr; Back to Campaigns</a>
+  </div>
+
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-50">Create Campaign</h1>
+    <p class="mt-2 text-slate-400">Build your campaign locally, then push it to Google Ads when ready.</p>
+  </div>
+
+  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8 max-w-3xl">
+    <%= render "form", form_url: portal_google_campaigns_path, submit_label: "Create Campaign" %>
+  </div>
+</div>

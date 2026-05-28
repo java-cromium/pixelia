@@ -1,6 +1,4 @@
-class Portal::EcommerceStoresController < ApplicationController
-  before_action :authenticate_user!
-
+class Portal::EcommerceStoresController < Portal::BaseController
   def index
     @pagy, @ecommerce_stores = pagy(policy_scope(EcommerceStore))
   end

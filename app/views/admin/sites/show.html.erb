@@ -1,0 +1,93 @@
+<% content_for(:title) { "#{@site.name} — Sites — Admin — Pixelia" } %>
+
+<div class="p-8">
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <a href="<%= admin_sites_path %>" class="text-sm text-slate-500 hover:text-cyan-400 transition-colors mb-2 inline-block">&larr; Back to Sites</a>
+      <h1 class="text-3xl font-bold text-slate-50"><%= @site.name %></h1>
+      <p class="text-slate-400 mt-1">
+        Account: <span class="text-slate-300"><%= @site.account.name %></span>
+        <% if @site.domain_display %>
+          &middot; <span class="font-mono text-sm"><%= @site.domain_display %></span>
+        <% end %>
+      </p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= @site.published? ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-500/15 text-amber-400' %>">
+        <%= @site.published? ? "Published" : "Draft" %>
+      </span>
+      <a href="<%= edit_admin_site_path(@site) %>" class="px-4 py-2 bg-slate-700 text-slate-50 text-sm font-medium rounded-lg hover:bg-slate-600 transition-colors">Edit Site</a>
+    </div>
+  </div>
+
+  <!-- Domain Status (Admin view) -->
+  <% if @site.cf_hostname_id.present? %>
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6 mb-8">
+      <h2 class="text-lg font-semibold text-slate-50 mb-4">Custom Domain</h2>
+      <div class="grid sm:grid-cols-4 gap-4">
+        <div>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Domain</p>
+          <p class="mt-1 text-sm font-semibold text-slate-50"><%= @site.custom_domain %></p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Hostname Status</p>
+          <p class="mt-1 text-sm font-semibold <%= @site.domain_status == 'active' ? 'text-emerald-400' : 'text-amber-400' %>"><%= @site.domain_status&.titleize || "—" %></p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">SSL Status</p>
+          <p class="mt-1 text-sm font-semibold <%= @site.ssl_status == 'active' ? 'text-emerald-400' : 'text-amber-400' %>"><%= @site.ssl_status&.titleize || "—" %></p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">CF Hostname ID</p>
+          <p class="mt-1 text-xs font-mono text-slate-400"><%= @site.cf_hostname_id %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Pages -->
+  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-700/50 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-slate-50">Pages</h2>
+      <a href="<%= new_admin_site_page_path(@site) %>" class="px-4 py-2 bg-indigo-600 text-slate-50 text-sm font-semibold rounded-lg shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-colors">+ New Page</a>
+    </div>
+
+    <% if @pages.any? %>
+      <table class="w-full">
+        <thead>
+          <tr class="text-left text-xs font-medium text-slate-500 uppercase tracking-wider bg-slate-800 border-b border-slate-700">
+            <th class="px-6 py-3">Title</th>
+            <th class="px-6 py-3">Slug</th>
+            <th class="px-6 py-3">Status</th>
+            <th class="px-6 py-3">Last Modified</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700/50">
+          <% @pages.each do |page| %>
+            <tr class="hover:bg-slate-700/30 transition-colors">
+              <td class="px-6 py-4 font-medium text-slate-50"><%= page.title %></td>
+              <td class="px-6 py-4 text-slate-400 font-mono text-sm">/<%= page.slug %></td>
+              <td class="px-6 py-4">
+                <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= page.status == 'published' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-500/15 text-amber-400' %>">
+                  <%= page.status.capitalize %>
+                </span>
+              </td>
+              <td class="px-6 py-4 text-slate-400 text-sm"><%= page.updated_at.strftime("%b %d, %Y %H:%M") %></td>
+              <td class="px-6 py-4 text-right space-x-3">
+                <a href="<%= editor_admin_site_page_path(@site, page) %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">Open Editor</a>
+                <a href="<%= edit_admin_site_page_path(@site, page) %>" class="text-sm text-slate-400 hover:text-slate-300 font-medium">Settings</a>
+                <%= link_to "Delete", admin_site_page_path(@site, page), data: { turbo_method: :delete, turbo_confirm: "Delete this page?" }, class: "text-sm text-red-400 hover:text-red-300 font-medium" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="px-6 py-12 text-center">
+        <p class="text-slate-500 mb-4">No pages yet. Create your first page to start building.</p>
+        <a href="<%= new_admin_site_page_path(@site) %>" class="px-5 py-2.5 bg-indigo-600 text-slate-50 text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-colors">+ Create First Page</a>
+      </div>
+    <% end %>
+  </div>
+</div>

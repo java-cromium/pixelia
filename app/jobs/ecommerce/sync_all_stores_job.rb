@@ -6,7 +6,7 @@ module Ecommerce
       Rails.logger.info("[EcommerceSync] Dispatching sync for all active stores...")
 
       ActsAsTenant.without_tenant do
-        EcommerceStore.includes(:project).find_each do |store|
+        EcommerceStore.find_each do |store|
           case store.platform
           when "Shopify"
             Ecommerce::ShopifySyncJob.perform_later(store.id)

@@ -6,7 +6,7 @@ class EcommerceStorePolicy < ApplicationPolicy
   end
 
   def show?
-    user.super_admin? || record.client_id == user.client_id
+    user.super_admin? || record.account_id == user.account_id
   end
 
   class Scope < ApplicationPolicy::Scope
@@ -14,7 +14,7 @@ class EcommerceStorePolicy < ApplicationPolicy
       if user.super_admin?
         scope.all
       else
-        scope.where(client_id: user.client_id)
+        scope.where(account_id: user.account_id)
       end
     end
   end

@@ -12,8 +12,8 @@
         <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= @user.super_admin? ? 'bg-indigo-500/15 text-indigo-400' : 'bg-cyan-500/15 text-cyan-400' %>">
           <%= @user.role.humanize %>
         </span>
-        <% if @user.client %>
-          <span class="text-sm text-slate-400">Client: <a href="<%= admin_client_path(@user.client) %>" class="text-cyan-400 hover:text-cyan-300 font-medium"><%= @user.client.name %></a></span>
+        <% if @user.account %>
+          <span class="text-sm text-slate-400">Account: <a href="<%= admin_account_path(@user.account) %>" class="text-cyan-400 hover:text-cyan-300 font-medium"><%= @user.account.name %></a></span>
         <% end %>
       </div>
     </div>
@@ -36,8 +36,8 @@
         <dd class="text-sm text-slate-50"><%= @user.role.humanize %></dd>
       </div>
       <div class="flex justify-between border-t border-slate-700/50 pt-4">
-        <dt class="text-sm font-medium text-slate-500">Client</dt>
-        <dd class="text-sm text-slate-50"><%= @user.client&.name || "None (Super Admin)" %></dd>
+        <dt class="text-sm font-medium text-slate-500">Account</dt>
+        <dd class="text-sm text-slate-50"><%= @user.account&.name || "None (Super Admin)" %></dd>
       </div>
       <div class="flex justify-between border-t border-slate-700/50 pt-4">
         <dt class="text-sm font-medium text-slate-500">Created</dt>

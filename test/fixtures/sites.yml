@@ -1,0 +1,21 @@
+acme_site:
+  account: acme
+  name: Acme Website
+  subdomain: acme
+  published: true
+
+acme_site_with_domain:
+  account: acme
+  name: Acme Store
+  subdomain: acme-store
+  custom_domain: shop.acme.com
+  cf_hostname_id: cf-hostname-123
+  domain_status: pending
+  ssl_status: pending_validation
+  published: true
+
+globex_site:
+  account: globex
+  name: Globex Website
+  subdomain: globex
+  published: false

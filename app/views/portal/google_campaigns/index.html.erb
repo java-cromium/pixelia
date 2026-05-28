@@ -1,0 +1,71 @@
+<% content_for(:title) { "Google Ads Campaigns — Pixelia" } %>
+
+<div class="p-8">
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-50">Google Ads Campaigns</h1>
+      <p class="mt-1 text-slate-400">Manage your advertising campaigns.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <% if @google_account&.connected? %>
+        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          Connected as <%= @google_account.google_email %>
+        </span>
+      <% end %>
+      <a href="<%= new_portal_google_campaign_path %>" class="px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-colors">+ New Campaign</a>
+    </div>
+  </div>
+
+  <% if @campaigns.any? %>
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="text-left text-xs font-medium text-slate-500 uppercase tracking-wider bg-slate-800 border-b border-slate-700">
+            <th class="px-6 py-3">Campaign</th>
+            <th class="px-6 py-3">Type</th>
+            <th class="px-6 py-3">Status</th>
+            <th class="px-6 py-3">Budget</th>
+            <th class="px-6 py-3">Created</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700/50">
+          <% @campaigns.each do |campaign| %>
+            <tr class="hover:bg-slate-700/30 transition-colors">
+              <td class="px-6 py-4">
+                <a href="<%= portal_google_campaign_path(campaign) %>" class="font-medium text-slate-50 hover:text-cyan-400 transition-colors"><%= campaign.name %></a>
+                <% if campaign.synced? %>
+                  <p class="text-xs text-slate-500 mt-0.5">ID: <%= campaign.google_campaign_id %></p>
+                <% end %>
+              </td>
+              <td class="px-6 py-4">
+                <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-700 text-slate-300"><%= campaign.campaign_type.titleize %></span>
+              </td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium <%= campaign_status_class(campaign.status) %>">
+                  <span class="w-1.5 h-1.5 rounded-full <%= campaign_status_dot(campaign.status) %>"></span>
+                  <%= campaign.status.titleize %>
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-300"><%= campaign.budget_display || "—" %></td>
+              <td class="px-6 py-4 text-sm text-slate-400"><%= campaign.created_at.strftime("%b %d, %Y") %></td>
+              <td class="px-6 py-4 text-right">
+                <a href="<%= portal_google_campaign_path(campaign) %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">View</a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-16 text-center">
+      <div class="w-16 h-16 bg-indigo-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+      </div>
+      <h3 class="text-lg font-semibold text-slate-50">No campaigns yet</h3>
+      <p class="mt-2 text-slate-500 text-sm mb-6">Create your first Google Ads campaign to start driving traffic.</p>
+      <a href="<%= new_portal_google_campaign_path %>" class="inline-flex px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-colors">+ Create First Campaign</a>
+    </div>
+  <% end %>
+</div>

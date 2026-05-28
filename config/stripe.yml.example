@@ -1,0 +1,14 @@
+# Stripe Configuration
+# Copy this file and set environment variables for your environment.
+#
+# Required environment variables:
+#   STRIPE_SECRET_KEY       - Your Stripe secret key (sk_test_... or sk_live_...)
+#   STRIPE_PUBLISHABLE_KEY  - Your Stripe publishable key (pk_test_... or pk_live_...)
+#   STRIPE_WEBHOOK_SECRET   - Webhook signing secret (whsec_...)
+#
+# Plan Price IDs (create in Stripe Dashboard > Products):
+#   STRIPE_STARTER_PRICE_ID - Price ID for Starter plan ($49/mo)
+#   STRIPE_GROWTH_PRICE_ID  - Price ID for Growth plan ($149/mo)
+#
+# For local development with Stripe CLI:
+#   stripe listen --forward-to localhost:3000/webhooks/stripe

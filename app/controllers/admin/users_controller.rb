@@ -2,7 +2,7 @@ class Admin::UsersController < Admin::BaseController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
-    @pagy, @users = pagy(policy_scope(User).includes(:client).order(:email))
+    @pagy, @users = pagy(policy_scope(User).includes(:account).order(:email))
     authorize User
   end
 
@@ -54,6 +54,6 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :role, :client_id)
+    params.require(:user).permit(:email, :password, :password_confirmation, :role, :account_id)
   end
 end
