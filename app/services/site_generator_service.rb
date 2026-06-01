@@ -29,7 +29,7 @@ class SiteGeneratorService
   end
 
   def generate!
-    page = @site.pages.find_or_initialize_by(slug: "index")
+    page = @site.pages.find_or_initialize_by(slug: "home")
     page.title = "Home"
     page.status = "published"
     page.position = 0

@@ -49,7 +49,12 @@ class Portal::PagesController < Portal::BaseController
   # GET/PUT /portal/sites/:site_id/pages/:id/content
   def content
     if request.get?
-      render json: @page.content || {}
+      # If GrapeJS content is empty but we have generated HTML/CSS, return those for import
+      if @page.content.blank? && @page.html_content.present?
+        render json: { html: @page.html_content, css: @page.css_content }
+      else
+        render json: @page.content || {}
+      end
     elsif request.put? || request.patch?
       content_data = params[:data] || {}
       pages_html = params[:pagesHtml]
