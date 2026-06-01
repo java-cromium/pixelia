@@ -2,35 +2,35 @@
 
 <div class="p-8">
   <div class="mb-10">
-    <h1 class="text-3xl font-bold text-slate-50">Welcome back<%= current_user ? ", #{current_user.email}" : "" %></h1>
-    <p class="mt-2 text-slate-400">Here's an overview of your digital presence.</p>
+    <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-50">Welcome back<%= current_user ? ", #{current_user.email}" : "" %></h1>
+    <p class="mt-2 text-slate-500 dark:text-slate-400">Here's an overview of your digital presence.</p>
   </div>
 
     <!-- Stats Cards -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm dark:shadow-none">
         <p class="text-sm font-medium text-slate-500">Sites</p>
-        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @sites&.count || 0 %></p>
+        <p class="mt-2 text-3xl font-bold text-slate-800 dark:text-slate-50"><%= @sites&.count || 0 %></p>
       </div>
-      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm dark:shadow-none">
         <p class="text-sm font-medium text-slate-500">E-Commerce Stores</p>
-        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @stores&.count || 0 %></p>
+        <p class="mt-2 text-3xl font-bold text-slate-800 dark:text-slate-50"><%= @stores&.count || 0 %></p>
       </div>
-      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm dark:shadow-none">
         <p class="text-sm font-medium text-slate-500">Connected Stores</p>
-        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @stores&.select { |s| s.connected? }&.count || 0 %></p>
+        <p class="mt-2 text-3xl font-bold text-slate-800 dark:text-slate-50"><%= @stores&.select { |s| s.connected? }&.count || 0 %></p>
       </div>
-      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-6">
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm dark:shadow-none">
         <p class="text-sm font-medium text-slate-500">Plan</p>
-        <p class="mt-2 text-3xl font-bold text-slate-50"><%= @account&.plan&.capitalize || "—" %></p>
+        <p class="mt-2 text-3xl font-bold text-slate-800 dark:text-slate-50"><%= @account&.plan&.capitalize || "—" %></p>
       </div>
     </div>
 
     <!-- Charts Row -->
     <% if @account %>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
-        <h2 class="text-lg font-bold text-slate-50 mb-6">Stores by Platform</h2>
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-8 shadow-sm dark:shadow-none">
+        <h2 class="text-lg font-bold text-slate-800 dark:text-slate-50 mb-6">Stores by Platform</h2>
         <% if @stores_by_platform.present? && @stores_by_platform.any? %>
           <%= pie_chart @stores_by_platform,
               colors: ["#10B981", "#4F46E5", "#06B6D4"],
@@ -45,37 +45,37 @@
         <% end %>
       </div>
 
-      <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
-        <h2 class="text-lg font-bold text-slate-50 mb-4">Platform Status</h2>
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-8 shadow-sm dark:shadow-none">
+        <h2 class="text-lg font-bold text-slate-800 dark:text-slate-50 mb-4">Platform Status</h2>
         <div class="space-y-4">
           <% if @sites.present? && @sites.any? %>
             <% @sites.each do |site| %>
               <div class="flex items-center justify-between">
-                <span class="text-sm text-slate-400"><%= site.name %> — <%= site.domain_display || "No domain" %></span>
-                <span class="inline-flex items-center gap-1.5 text-xs font-medium <%= site.published? ? 'text-emerald-400 bg-emerald-500/15' : 'text-slate-400 bg-slate-700' %> px-3 py-1 rounded-full">
-                  <span class="w-1.5 h-1.5 rounded-full <%= site.published? ? 'bg-emerald-400' : 'bg-slate-500' %>"></span>
+                <span class="text-sm text-slate-600 dark:text-slate-400"><%= site.name %> — <%= site.domain_display || "No domain" %></span>
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium <%= site.published? ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/15' : 'text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700' %> px-3 py-1 rounded-full">
+                  <span class="w-1.5 h-1.5 rounded-full <%= site.published? ? 'bg-emerald-400' : 'bg-slate-400 dark:bg-slate-500' %>"></span>
                   <%= site.published? ? "Published" : "Draft" %>
                 </span>
               </div>
             <% end %>
           <% else %>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-400">Website</span>
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-700 px-3 py-1 rounded-full">
-                <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Not Set Up
+              <span class="text-sm text-slate-600 dark:text-slate-400">Website</span>
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 px-3 py-1 rounded-full">
+                <span class="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full"></span> Not Set Up
               </span>
             </div>
           <% end %>
           <% if @stores.present? %>
             <% @stores.each do |store| %>
               <div class="flex items-center justify-between">
-                <span class="text-sm text-slate-400"><%= store.platform.capitalize %> — <%= store.store_url.gsub(%r{https?://}, '') %></span>
+                <span class="text-sm text-slate-600 dark:text-slate-400"><%= store.platform.capitalize %> — <%= store.store_url.gsub(%r{https?://}, '') %></span>
                 <% if store.connected? %>
-                  <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/15 px-3 py-1 rounded-full">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/15 px-3 py-1 rounded-full">
                     <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span> Connected
                   </span>
                 <% else %>
-                  <span class="inline-flex items-center gap-1.5 text-xs font-medium text-amber-400 bg-amber-500/15 px-3 py-1 rounded-full">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-500/15 px-3 py-1 rounded-full">
                     <span class="w-1.5 h-1.5 bg-amber-400 rounded-full"></span> Keys Missing
                   </span>
                 <% end %>
@@ -83,16 +83,16 @@
             <% end %>
           <% else %>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-400">E-Commerce</span>
-              <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-700 px-3 py-1 rounded-full">
-                <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Not Connected
+              <span class="text-sm text-slate-600 dark:text-slate-400">E-Commerce</span>
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 px-3 py-1 rounded-full">
+                <span class="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full"></span> Not Connected
               </span>
             </div>
           <% end %>
           <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-400">Marketing Campaigns</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-700 px-3 py-1 rounded-full">
-              <span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span> Pending Setup
+            <span class="text-sm text-slate-600 dark:text-slate-400">Marketing Campaigns</span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 px-3 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 bg-slate-400 dark:bg-slate-500 rounded-full"></span> Pending Setup
             </span>
           </div>
         </div>

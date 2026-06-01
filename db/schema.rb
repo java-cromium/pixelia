@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_28_170305) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_29_153800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -81,6 +81,41 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_28_170305) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "meta_ad_accounts", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "meta_business_id"
+    t.string "meta_ad_account_id"
+    t.string "meta_email"
+    t.text "access_token"
+    t.datetime "token_expires_at"
+    t.string "status", default: "connected", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_meta_ad_accounts_on_account_id", unique: true
+  end
+
+  create_table "meta_ad_campaigns", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "meta_ad_account_id", null: false
+    t.string "meta_campaign_id"
+    t.string "name", null: false
+    t.string "objective", default: "OUTCOME_TRAFFIC", null: false
+    t.string "status", default: "draft", null: false
+    t.bigint "daily_budget_cents"
+    t.bigint "lifetime_budget_cents"
+    t.string "target_url"
+    t.date "start_date"
+    t.date "end_date"
+    t.jsonb "settings", default: {}
+    t.datetime "last_synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "status"], name: "index_meta_ad_campaigns_on_account_id_and_status"
+    t.index ["account_id"], name: "index_meta_ad_campaigns_on_account_id"
+    t.index ["meta_ad_account_id"], name: "index_meta_ad_campaigns_on_meta_ad_account_id"
+    t.index ["meta_campaign_id"], name: "index_meta_ad_campaigns_on_meta_campaign_id"
   end
 
   create_table "pages", force: :cascade do |t|
@@ -230,6 +265,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_28_170305) do
   add_foreign_key "google_ad_accounts", "accounts"
   add_foreign_key "google_ad_campaigns", "accounts"
   add_foreign_key "google_ad_campaigns", "google_ad_accounts"
+  add_foreign_key "meta_ad_accounts", "accounts"
+  add_foreign_key "meta_ad_campaigns", "accounts"
+  add_foreign_key "meta_ad_campaigns", "meta_ad_accounts"
   add_foreign_key "pages", "sites"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_charges", "pay_subscriptions", column: "subscription_id"

@@ -84,10 +84,7 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: pixelia_production
-    username: pixelia
-    password: <%= ENV["PIXELIA_DATABASE_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "localhost") %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *primary_production
     database: pixelia_production_cache

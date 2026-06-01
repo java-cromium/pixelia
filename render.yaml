@@ -1,23 +1,30 @@
+# ─── Render Infrastructure-as-Code Blueprint ─────────────────────────────────
+# Deploy with: Connect repo on Render Dashboard → "New Blueprint Instance"
+# Docs: https://render.com/docs/blueprint-spec
+
 databases:
   - name: pixelia-db
     databaseName: pixelia_production
     user: pixelia_user
-    plan: starter # You can adjust plans based on your budget
+    plan: starter
 
 services:
-  # 1. Redis Instance for Sidekiq
+  # ── Redis (Sidekiq + caching) ──────────────────────────────────
   - type: redis
     name: pixelia-redis
     plan: starter
-    ipAllowList: [] # Keeps Redis internal and secure
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
 
-  # 2. The Main Rails Web Server
+  # ── Web Service (Rails + Puma) ─────────────────────────────────
   - type: web
     name: pixelia-web
-    env: ruby
+    runtime: ruby
     plan: starter
-    buildCommand: "./bin/render-build.sh" 
+    buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
+    healthCheckPath: /up
+    autoDeploy: true
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -29,15 +36,54 @@ services:
           name: pixelia-redis
           property: connectionString
       - key: RAILS_MASTER_KEY
-        sync: false # You will input this manually in the Render dashboard
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_LEVEL
+        value: info
+      - key: WEB_CONCURRENCY
+        value: "2"
+      - key: RAILS_MAX_THREADS
+        value: "5"
+      - key: APP_HOST
+        sync: false
+      - key: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        sync: false
+      - key: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+        sync: false
+      - key: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_STARTER_PRICE_ID
+        sync: false
+      - key: STRIPE_GROWTH_PRICE_ID
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_ADS_DEVELOPER_TOKEN
+        sync: false
+      - key: META_APP_ID
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: CLOUDFLARE_API_TOKEN
+        sync: false
+      - key: CLOUDFLARE_ZONE_ID
+        sync: false
 
-  # 3. The Sidekiq Background Worker
+  # ── Background Worker (Sidekiq) ────────────────────────────────
   - type: worker
     name: pixelia-worker
-    env: ruby
+    runtime: ruby
     plan: starter
     buildCommand: "bundle install"
     startCommand: "bundle exec sidekiq -C config/sidekiq.yml"
+    autoDeploy: true
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -49,4 +95,12 @@ services:
           name: pixelia-redis
           property: connectionString
       - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        sync: false
+      - key: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+        sync: false
+      - key: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
         sync: false

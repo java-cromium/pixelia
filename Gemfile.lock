@@ -81,8 +81,6 @@ GEM
       version_gem (~> 1.1, >= 1.1.9)
     base64 (0.3.0)
     bcrypt (3.1.21)
-    bcrypt_pbkdf (1.1.2)
-    bcrypt_pbkdf (1.1.2-x64-mingw-ucrt)
     benchmark (0.5.0)
     bigdecimal (4.0.1)
     bindex (0.8.1)
@@ -100,6 +98,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    cgi (0.5.1)
     chartkick (5.2.1)
     childprocess (5.1.0)
       logger (~> 1.5)
@@ -119,9 +118,7 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
-    dotenv (3.2.0)
     drb (2.2.3)
-    ed25519 (1.4.0)
     erb (6.0.2)
     erubi (1.13.1)
     et-orbi (1.4.0)
@@ -130,6 +127,8 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
+    faraday-multipart (1.2.0)
+      multipart-post (~> 2.0)
     faraday-net_http (3.4.3)
       net-http (~> 0.5)
     faraday-retry (2.4.0)
@@ -205,17 +204,15 @@ GEM
       bigdecimal (>= 3.1, < 5)
     jwt (3.2.0)
       base64
-    kamal (2.10.1)
-      activesupport (>= 7.0)
-      base64 (~> 0.2)
-      bcrypt_pbkdf (~> 1.0)
-      concurrent-ruby (~> 1.2)
-      dotenv (~> 3.1)
-      ed25519 (~> 1.4)
-      net-ssh (~> 7.3)
-      sshkit (>= 1.23.0, < 2.0)
-      thor (~> 1.3)
-      zeitwerk (>= 2.6.18, < 3.0)
+    koala (3.7.0)
+      addressable
+      base64
+      cgi
+      faraday
+      faraday-multipart
+      json (>= 1.8)
+      ostruct
+      rexml
     language_server-protocol (3.17.0.5)
     launchy (3.1.1)
       addressable (~> 2.8)
@@ -244,6 +241,7 @@ GEM
     multi_json (1.21.1)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
+    multipart-post (2.4.1)
     net-http (0.9.1)
       uri (>= 0.11.1)
     net-imap (0.6.3)
@@ -253,13 +251,8 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-scp (4.1.0)
-      net-ssh (>= 2.6.5, < 8.0.0)
-    net-sftp (4.0.0)
-      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.1)
       net-protocol
-    net-ssh (7.3.0)
     nio4r (2.7.5)
     nokogiri (1.19.1-x64-mingw-ucrt)
       racc (~> 1.4)
@@ -279,6 +272,9 @@ GEM
       logger
       rack (>= 2.2.3)
       rack-protection
+    omniauth-facebook (10.0.0)
+      bigdecimal
+      omniauth-oauth2 (>= 1.2, < 3)
     omniauth-google-oauth2 (1.2.2)
       jwt (>= 2.9.2)
       oauth2 (~> 2.0)
@@ -447,20 +443,11 @@ GEM
       fugit (~> 1.11)
       railties (>= 7.1)
       thor (>= 1.3.1)
-    sshkit (1.25.0)
-      base64
-      logger
-      net-scp (>= 1.1.2)
-      net-sftp (>= 2.1.2)
-      net-ssh (>= 2.8.0)
-      ostruct
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.2.0)
     stripe (12.6.0)
     thor (1.5.0)
-    thruster (0.1.18)
-    thruster (0.1.18-x86_64-linux)
     timeout (0.6.0)
     tsort (0.2.0)
     turbo-rails (2.0.23)
@@ -509,9 +496,10 @@ DEPENDENCIES
   httparty
   jbuilder
   jsbundling-rails
-  kamal
+  koala (~> 3.6)
   letter_opener
   minitest (~> 5.25)
+  omniauth-facebook
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   pagy (~> 9.0)
@@ -530,7 +518,6 @@ DEPENDENCIES
   solid_queue
   stimulus-rails
   stripe (~> 12.0)
-  thruster
   turbo-rails
   tzinfo-data
   web-console

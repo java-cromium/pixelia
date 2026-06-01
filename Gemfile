@@ -33,11 +33,8 @@ gem "solid_cable"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
-gem "kamal", require: false
-
-# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
-gem "thruster", require: false
+# Deployment handled by Render (render.yaml blueprint)
+# See bin/render-build.sh for the build script
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -66,6 +63,10 @@ gem "pundit"
 gem "google-ads-googleads", "~> 31.0"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
+
+# Meta (Facebook) Ads API
+gem "koala", "~> 3.6"
+gem "omniauth-facebook"
 
 # Charts & analytics
 gem "chartkick"

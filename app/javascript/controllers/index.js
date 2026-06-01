@@ -24,3 +24,6 @@ application.register("clipboard", ClipboardController)
 
 import GrapejsEditorController from "./grapesjs_editor_controller"
 application.register("grapesjs-editor", GrapejsEditorController)
+
+import ThemeController from "./theme_controller"
+application.register("theme", ThemeController)

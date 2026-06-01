@@ -1,5 +1,5 @@
 class Portal::GoogleCampaignsController < Portal::BaseController
-  before_action :require_google_ads_connection
+  before_action :require_google_ads_connection, except: [:index]
   before_action :set_campaign, only: [:show, :edit, :update, :destroy, :sync, :pause, :enable]
 
   def index

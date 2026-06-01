@@ -53,6 +53,18 @@ Rails.application.routes.draw do
       get  "auth/google_ads/callback", to: "google_ads_oauth#callback", as: nil
       get  "auth/google_ads/failure",  to: "google_ads_oauth#failure", as: nil
       delete "google_ads/disconnect",  to: "google_ads_oauth#destroy", as: nil
+
+      # Meta Ads
+      resources :meta_campaigns, controller: "meta_campaigns", as: nil do
+        member do
+          post :sync
+          post :pause
+          post :enable
+        end
+      end
+      get  "auth/meta_ads/callback", to: "meta_ads_oauth#callback", as: nil
+      get  "auth/meta_ads/failure",  to: "meta_ads_oauth#failure", as: nil
+      delete "meta_ads/disconnect",  to: "meta_ads_oauth#destroy", as: nil
     end
   end
 
@@ -108,6 +120,18 @@ Rails.application.routes.draw do
     get  "auth/google_ads/callback", to: "google_ads_oauth#callback", as: :google_ads_callback
     get  "auth/google_ads/failure",  to: "google_ads_oauth#failure", as: :google_ads_failure
     delete "google_ads/disconnect",  to: "google_ads_oauth#destroy", as: :google_ads_disconnect
+
+    # Meta Ads
+    resources :meta_campaigns, controller: "meta_campaigns" do
+      member do
+        post :sync
+        post :pause
+        post :enable
+      end
+    end
+    get  "auth/meta_ads/callback", to: "meta_ads_oauth#callback", as: :meta_ads_callback
+    get  "auth/meta_ads/failure",  to: "meta_ads_oauth#failure", as: :meta_ads_failure
+    delete "meta_ads/disconnect",  to: "meta_ads_oauth#destroy", as: :meta_ads_disconnect
   end
 
   scope module: "marketing" do

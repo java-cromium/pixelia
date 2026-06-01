@@ -1,0 +1,92 @@
+<% content_for(:title) { "#{@campaign.name} — Meta Ads — Pixelia" } %>
+
+<div class="p-8">
+  <div class="mb-6">
+    <a href="<%= portal_meta_campaigns_path %>" class="text-sm text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 font-medium">&larr; Back to Campaigns</a>
+  </div>
+
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-50"><%= @campaign.name %></h1>
+      <div class="mt-2 flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 text-xs font-medium <%= meta_campaign_status_class(@campaign.status) %> px-2.5 py-1 rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full <%= meta_campaign_status_dot(@campaign.status) %>"></span>
+          <%= @campaign.status.titleize %>
+        </span>
+        <% if @campaign.synced? %>
+          <span class="text-xs text-slate-500">Meta ID: <%= @campaign.meta_campaign_id %></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <% if @campaign.draft? %>
+        <%= button_to "Push to Meta", sync_portal_meta_campaign_path(@campaign),
+            method: :post,
+            class: "px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-500 transition-colors",
+            data: { turbo_confirm: "Push this campaign to Meta Ads?" } %>
+      <% elsif @campaign.status == "active" %>
+        <%= button_to "Pause", pause_portal_meta_campaign_path(@campaign),
+            method: :post,
+            class: "px-4 py-2 bg-amber-600 text-white text-sm font-semibold rounded-lg hover:bg-amber-500 transition-colors" %>
+      <% elsif @campaign.status == "paused" && @campaign.synced? %>
+        <%= button_to "Activate", enable_portal_meta_campaign_path(@campaign),
+            method: :post,
+            class: "px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-500 transition-colors" %>
+      <% end %>
+      <a href="<%= edit_portal_meta_campaign_path(@campaign) %>" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">Edit</a>
+      <%= button_to "Delete", portal_meta_campaign_path(@campaign),
+          method: :delete,
+          class: "px-4 py-2 text-sm font-semibold text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors",
+          data: { turbo_confirm: "Delete this campaign? This cannot be undone." } %>
+    </div>
+  </div>
+
+  <!-- Campaign Details -->
+  <div class="grid md:grid-cols-2 gap-8">
+    <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-8 shadow-sm dark:shadow-none">
+      <h2 class="text-lg font-bold text-slate-800 dark:text-slate-50 mb-6">Campaign Details</h2>
+      <dl class="space-y-4">
+        <div class="flex items-center justify-between">
+          <dt class="text-sm font-medium text-slate-500">Objective</dt>
+          <dd class="text-sm font-semibold text-slate-800 dark:text-slate-50"><%= @campaign.objective_display %></dd>
+        </div>
+        <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-700/50 pt-4">
+          <dt class="text-sm font-medium text-slate-500">Daily Budget</dt>
+          <dd class="text-sm text-slate-800 dark:text-slate-50"><%= @campaign.daily_budget_display || "—" %></dd>
+        </div>
+        <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-700/50 pt-4">
+          <dt class="text-sm font-medium text-slate-500">Lifetime Budget</dt>
+          <dd class="text-sm text-slate-800 dark:text-slate-50"><%= @campaign.lifetime_budget_display || "—" %></dd>
+        </div>
+        <% if @campaign.target_url.present? %>
+          <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-700/50 pt-4">
+            <dt class="text-sm font-medium text-slate-500">Target URL</dt>
+            <dd class="text-sm text-cyan-600 dark:text-cyan-400 truncate max-w-[200px]"><%= @campaign.target_url %></dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+
+    <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-8 shadow-sm dark:shadow-none">
+      <h2 class="text-lg font-bold text-slate-800 dark:text-slate-50 mb-6">Schedule & Sync</h2>
+      <dl class="space-y-4">
+        <div class="flex items-center justify-between">
+          <dt class="text-sm font-medium text-slate-500">Start Date</dt>
+          <dd class="text-sm text-slate-800 dark:text-slate-50"><%= @campaign.start_date&.strftime("%B %d, %Y") || "—" %></dd>
+        </div>
+        <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-700/50 pt-4">
+          <dt class="text-sm font-medium text-slate-500">End Date</dt>
+          <dd class="text-sm text-slate-800 dark:text-slate-50"><%= @campaign.end_date&.strftime("%B %d, %Y") || "—" %></dd>
+        </div>
+        <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-700/50 pt-4">
+          <dt class="text-sm font-medium text-slate-500">Last Synced</dt>
+          <dd class="text-sm text-slate-800 dark:text-slate-50"><%= @campaign.last_synced_at&.strftime("%B %d, %Y %l:%M %p") || "Never" %></dd>
+        </div>
+        <div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-700/50 pt-4">
+          <dt class="text-sm font-medium text-slate-500">Created</dt>
+          <dd class="text-sm text-slate-800 dark:text-slate-50"><%= @campaign.created_at.strftime("%B %d, %Y") %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>

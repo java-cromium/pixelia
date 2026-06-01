@@ -1,0 +1,6 @@
+acme_meta:
+  account: acme
+  meta_business_id: "1234567890"
+  meta_ad_account_id: "act_1234567890"
+  meta_email: "ads@acme.test"
+  status: "connected"

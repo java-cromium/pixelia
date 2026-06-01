@@ -1,7 +1,7 @@
 <%= form_with model: @campaign, url: form_url, class: "space-y-6" do |f| %>
   <% if @campaign.errors.any? %>
-    <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
-      <ul class="list-disc list-inside text-sm text-red-400 space-y-1">
+    <div class="p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-xl">
+      <ul class="list-disc list-inside text-sm text-red-600 dark:text-red-400 space-y-1">
         <% @campaign.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
@@ -16,22 +16,22 @@
     </div>
 
     <div>
-      <%= f.label :campaign_type, "Campaign Type", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
-      <%= f.select :campaign_type,
-          GoogleAdCampaign::CAMPAIGN_TYPES.map { |t| [t.titleize, t] },
+      <%= f.label :objective, "Campaign Objective", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
+      <%= f.select :objective,
+          MetaAdCampaign::OBJECTIVES.map { |o| [o.sub("OUTCOME_", "").titleize, o] },
           {},
           class: "w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
     </div>
 
     <div>
-      <%= f.label :budget_amount_micros, "Daily Budget ($)", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
+      <%= f.label :daily_budget_cents, "Daily Budget ($)", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
       <div class="relative">
         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">$</span>
-        <%= f.number_field :budget_amount_micros,
-            value: @campaign.budget_amount_micros ? (@campaign.budget_amount_micros / 1_000_000.0).round(2) : nil,
+        <%= f.number_field :daily_budget_cents,
+            value: @campaign.daily_budget_cents ? (@campaign.daily_budget_cents / 100.0).round(2) : nil,
             step: 0.01, min: 1,
             class: "w-full pl-8 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow",
-            placeholder: "50.00" %>
+            placeholder: "20.00" %>
       </div>
       <p class="text-xs text-slate-500 mt-1">Minimum $1.00/day</p>
     </div>
@@ -54,6 +54,6 @@
 
   <div class="pt-4 flex items-center gap-4">
     <%= f.submit submit_label, class: "px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 transition-all duration-200 cursor-pointer" %>
-    <a href="<%= portal_google_campaigns_path %>" class="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 font-medium">Cancel</a>
+    <a href="<%= portal_meta_campaigns_path %>" class="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 font-medium">Cancel</a>
   </div>
 <% end %>

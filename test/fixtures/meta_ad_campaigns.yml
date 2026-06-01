@@ -1,0 +1,20 @@
+traffic_campaign:
+  account: acme
+  meta_ad_account: acme_meta
+  name: "Summer Sale Traffic"
+  objective: "OUTCOME_TRAFFIC"
+  status: "draft"
+  daily_budget_cents: 2000
+  target_url: "https://shop.acme.test/summer"
+  start_date: "2026-06-01"
+
+active_campaign:
+  account: acme
+  meta_ad_account: acme_meta
+  meta_campaign_id: "23850001234567890"
+  name: "Brand Awareness Q3"
+  objective: "OUTCOME_AWARENESS"
+  status: "active"
+  daily_budget_cents: 5000
+  start_date: "2026-07-01"
+  last_synced_at: "2026-07-01 12:00:00"
