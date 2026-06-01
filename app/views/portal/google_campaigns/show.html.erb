@@ -2,26 +2,26 @@
 
 <div class="p-8">
   <div class="mb-6">
-    <a href="<%= portal_google_campaigns_path %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">&larr; Back to Campaigns</a>
+    <a href="<%= portal_google_campaigns_path %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">&larr; Back to Campaigns</a>
   </div>
 
   <!-- Campaign Header -->
-  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8 mb-8">
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 mb-8">
     <div class="flex items-center justify-between mb-6">
       <div class="flex items-center gap-4">
-        <div class="w-14 h-14 bg-indigo-500/15 rounded-xl flex items-center justify-center">
-          <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+        <div class="w-14 h-14 bg-brand-highlight/15 rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 text-brand-highlight dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
         </div>
         <div>
-          <h1 class="text-3xl font-bold text-slate-50"><%= @campaign.name %></h1>
+          <h1 class="text-3xl font-bold text-brand-text dark:text-slate-50"><%= @campaign.name %></h1>
           <div class="flex items-center gap-3 mt-1">
             <span class="inline-flex items-center gap-1.5 text-xs font-medium <%= campaign_status_class(@campaign.status) %>">
               <span class="w-1.5 h-1.5 rounded-full <%= campaign_status_dot(@campaign.status) %>"></span>
               <%= @campaign.status.titleize %>
             </span>
-            <span class="text-xs text-slate-500"><%= @campaign.campaign_type.titleize %></span>
+            <span class="text-xs text-brand-text-light dark:text-slate-500"><%= @campaign.campaign_type.titleize %></span>
             <% if @campaign.synced? %>
-              <span class="text-xs text-slate-500">ID: <%= @campaign.google_campaign_id %></span>
+              <span class="text-xs text-brand-text-light dark:text-slate-500">ID: <%= @campaign.google_campaign_id %></span>
             <% end %>
           </div>
         </div>
@@ -30,7 +30,7 @@
       <div class="flex items-center gap-2">
         <% if @campaign.draft? %>
           <%= button_to "Push to Google Ads", sync_portal_google_campaign_path(@campaign), method: :post,
-              class: "px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-500 transition-colors",
+              class: "px-4 py-2 bg-brand-highlight text-white text-sm font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors",
               data: { turbo_confirm: "Push this campaign to Google Ads?" } %>
         <% elsif @campaign.status == "paused" && @campaign.synced? %>
           <%= button_to "Enable", enable_portal_google_campaign_path(@campaign), method: :post,
@@ -39,46 +39,46 @@
           <%= button_to "Pause", pause_portal_google_campaign_path(@campaign), method: :post,
               class: "px-4 py-2 bg-amber-600 text-white text-sm font-semibold rounded-lg hover:bg-amber-500 transition-colors" %>
         <% end %>
-        <a href="<%= edit_portal_google_campaign_path(@campaign) %>" class="px-4 py-2 bg-slate-700 text-slate-50 text-sm font-medium rounded-lg hover:bg-slate-600 transition-colors">Edit</a>
+        <a href="<%= edit_portal_google_campaign_path(@campaign) %>" class="px-4 py-2 bg-brand-card-alt dark:bg-slate-700 text-brand-text dark:text-slate-50 text-sm font-medium rounded-lg hover:bg-brand-border dark:hover:bg-slate-600 transition-colors">Edit</a>
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-4 gap-6 pt-6 border-t border-slate-700/50">
+    <div class="grid sm:grid-cols-4 gap-6 pt-6 border-t border-brand-border dark:border-slate-700/50">
       <div>
-        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Daily Budget</p>
-        <p class="mt-1 text-sm font-semibold text-slate-50"><%= @campaign.budget_display || "—" %></p>
+        <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider">Daily Budget</p>
+        <p class="mt-1 text-sm font-semibold text-brand-text dark:text-slate-50"><%= @campaign.budget_display || "—" %></p>
       </div>
       <div>
-        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Target URL</p>
+        <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider">Target URL</p>
         <% if @campaign.target_url.present? %>
-          <a href="<%= @campaign.target_url %>" target="_blank" class="mt-1 text-sm font-semibold text-cyan-400 hover:text-cyan-300 block truncate"><%= @campaign.target_url %></a>
+          <a href="<%= @campaign.target_url %>" target="_blank" class="mt-1 text-sm font-semibold text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 block truncate"><%= @campaign.target_url %></a>
         <% else %>
-          <p class="mt-1 text-sm font-semibold text-slate-50">—</p>
+          <p class="mt-1 text-sm font-semibold text-brand-text dark:text-slate-50">—</p>
         <% end %>
       </div>
       <div>
-        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Start Date</p>
-        <p class="mt-1 text-sm font-semibold text-slate-50"><%= @campaign.start_date&.strftime("%b %d, %Y") || "—" %></p>
+        <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider">Start Date</p>
+        <p class="mt-1 text-sm font-semibold text-brand-text dark:text-slate-50"><%= @campaign.start_date&.strftime("%b %d, %Y") || "—" %></p>
       </div>
       <div>
-        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">End Date</p>
-        <p class="mt-1 text-sm font-semibold text-slate-50"><%= @campaign.end_date&.strftime("%b %d, %Y") || "Ongoing" %></p>
+        <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider">End Date</p>
+        <p class="mt-1 text-sm font-semibold text-brand-text dark:text-slate-50"><%= @campaign.end_date&.strftime("%b %d, %Y") || "Ongoing" %></p>
       </div>
     </div>
 
     <% if @campaign.last_synced_at.present? %>
-      <div class="mt-4 pt-4 border-t border-slate-700/50">
-        <p class="text-xs text-slate-500">Last synced with Google Ads: <%= @campaign.last_synced_at.strftime("%b %d, %Y at %H:%M") %></p>
+      <div class="mt-4 pt-4 border-t border-brand-border dark:border-slate-700/50">
+        <p class="text-xs text-brand-text-light dark:text-slate-500">Last synced with Google Ads: <%= @campaign.last_synced_at.strftime("%b %d, %Y at %H:%M") %></p>
       </div>
     <% end %>
   </div>
 
   <% unless @campaign.draft? %>
     <!-- Campaign Info -->
-    <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8 mb-8">
-      <h2 class="text-lg font-bold text-slate-50 mb-4">Campaign Details</h2>
+    <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 mb-8">
+      <h2 class="text-lg font-bold text-brand-text dark:text-slate-50 mb-4">Campaign Details</h2>
       <div class="rounded-xl border border-indigo-500/30 bg-indigo-500/5 p-6">
-        <p class="text-sm text-slate-400">
+        <p class="text-sm text-brand-text-light dark:text-slate-400">
           This campaign is live on Google Ads. Use the Google Ads dashboard for advanced settings like ad groups, keywords, and ad creatives.
           Changes to budget, dates, and status can be managed here.
         </p>
@@ -87,9 +87,9 @@
   <% end %>
 
   <!-- Danger Zone -->
-  <div class="bg-slate-800/50 rounded-2xl border border-red-500/30 p-8">
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-red-500/30 p-8">
     <h2 class="text-lg font-bold text-red-400 mb-2">Danger Zone</h2>
-    <p class="text-sm text-slate-400 mb-4">Removing a campaign will mark it as removed<%= " and delete it from Google Ads" if @campaign.synced? %>.</p>
+    <p class="text-sm text-brand-text-light dark:text-slate-400 mb-4">Removing a campaign will mark it as removed<%= " and delete it from Google Ads" if @campaign.synced? %>.</p>
     <%= button_to "Remove Campaign", portal_google_campaign_path(@campaign), method: :delete,
         class: "px-4 py-2 bg-red-600/20 text-red-400 text-sm font-semibold rounded-lg border border-red-500/30 hover:bg-red-600/30 transition-colors",
         data: { turbo_confirm: "Are you sure? This cannot be undone." } %>

@@ -2,72 +2,72 @@
 
 <div class="p-8">
   <div class="mb-6">
-    <a href="<%= portal_sites_path %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">&larr; Back to Sites</a>
+    <a href="<%= portal_sites_path %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">&larr; Back to Sites</a>
   </div>
 
   <!-- Site Header -->
-  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8 mb-8">
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 mb-8">
     <div class="flex items-center justify-between mb-6">
       <div class="flex items-center gap-4">
-        <div class="w-14 h-14 bg-cyan-500/15 rounded-xl flex items-center justify-center">
-          <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+        <div class="w-14 h-14 bg-brand-highlight/15 rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 text-brand-highlight dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
         </div>
         <div>
-          <h1 class="text-3xl font-bold text-slate-50"><%= @site.name %></h1>
-          <p class="text-slate-400"><%= @site.domain_display || "No domain configured" %></p>
+          <h1 class="text-3xl font-bold text-brand-text dark:text-slate-50"><%= @site.name %></h1>
+          <p class="text-brand-text-light dark:text-slate-400"><%= @site.domain_display || "No domain configured" %></p>
         </div>
       </div>
-      <span class="text-xs font-medium px-3 py-1.5 rounded-full <%= @site.published? ? 'bg-emerald-500/15 text-emerald-400' : 'bg-slate-700 text-slate-400' %>">
+      <span class="text-xs font-medium px-3 py-1.5 rounded-full <%= @site.published? ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-brand-card-alt dark:bg-slate-700 text-brand-text-light dark:text-slate-400' %>">
         <%= @site.published? ? "Published" : "Draft" %>
       </span>
     </div>
 
-    <div class="grid sm:grid-cols-3 gap-6 pt-6 border-t border-slate-700/50">
+    <div class="grid sm:grid-cols-3 gap-6 pt-6 border-t border-brand-border dark:border-slate-700/50">
       <div>
-        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Subdomain</p>
-        <p class="mt-1 text-sm font-semibold text-slate-50"><%= @site.subdomain.present? ? "#{@site.subdomain}.pixelia.com" : "—" %></p>
+        <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider">Subdomain</p>
+        <p class="mt-1 text-sm font-semibold text-brand-text dark:text-slate-50"><%= @site.subdomain.present? ? "#{@site.subdomain}.pixelia.com" : "—" %></p>
       </div>
       <div>
-        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Custom Domain</p>
-        <p class="mt-1 text-sm font-semibold text-slate-50"><%= @site.custom_domain.presence || "—" %></p>
+        <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider">Custom Domain</p>
+        <p class="mt-1 text-sm font-semibold text-brand-text dark:text-slate-50"><%= @site.custom_domain.presence || "—" %></p>
       </div>
       <div>
-        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Pages</p>
-        <p class="mt-1 text-sm font-semibold text-slate-50"><%= @site.pages.count %></p>
+        <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider">Pages</p>
+        <p class="mt-1 text-sm font-semibold text-brand-text dark:text-slate-50"><%= @site.pages.count %></p>
       </div>
     </div>
   </div>
 
   <!-- Custom Domain Management -->
-  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8 mb-8">
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 mb-8">
     <div class="flex items-center justify-between mb-6">
       <div>
-        <h2 class="text-lg font-bold text-slate-50">Custom Domain</h2>
-        <p class="text-sm text-slate-400 mt-1">Connect your own domain to this site.</p>
+        <h2 class="text-lg font-bold text-brand-text dark:text-slate-50">Custom Domain</h2>
+        <p class="text-sm text-brand-text-light dark:text-slate-400 mt-1">Connect your own domain to this site.</p>
       </div>
       <% if @site.domain_configured? %>
-        <a href="<%= portal_site_domain_path(@site) %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">Refresh Status</a>
+        <a href="<%= portal_site_domain_path(@site) %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">Refresh Status</a>
       <% end %>
     </div>
 
     <% if @site.domain_configured? %>
       <!-- Domain Status -->
-      <div class="rounded-xl border border-slate-700/50 bg-slate-900/50 p-6 mb-6">
+      <div class="rounded-xl border border-brand-border dark:border-slate-700/50 bg-brand-card-alt dark:bg-slate-900/50 p-6 mb-6">
         <div class="flex items-center gap-3 mb-4">
           <span class="w-2.5 h-2.5 rounded-full <%= @site.domain_active? ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse' %>"></span>
-          <span class="font-semibold text-slate-50"><%= @site.custom_domain %></span>
+          <span class="font-semibold text-brand-text dark:text-slate-50"><%= @site.custom_domain %></span>
         </div>
 
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Hostname Status</p>
+            <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider mb-1">Hostname Status</p>
             <span class="inline-flex items-center gap-1.5 text-sm font-medium <%= @site.domain_status == 'active' ? 'text-emerald-400' : 'text-amber-400' %>">
               <span class="w-1.5 h-1.5 rounded-full <%= @site.domain_status == 'active' ? 'bg-emerald-400' : 'bg-amber-400' %>"></span>
               <%= @site.domain_status&.titleize || "Unknown" %>
             </span>
           </div>
           <div>
-            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">SSL Status</p>
+            <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider mb-1">SSL Status</p>
             <span class="inline-flex items-center gap-1.5 text-sm font-medium <%= @site.ssl_status == 'active' ? 'text-emerald-400' : 'text-amber-400' %>">
               <span class="w-1.5 h-1.5 rounded-full <%= @site.ssl_status == 'active' ? 'bg-emerald-400' : 'bg-amber-400' %>"></span>
               <%= @site.ssl_status&.titleize || "Unknown" %>
@@ -92,7 +92,7 @@
             <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             DNS Configuration Required
           </h3>
-          <p class="text-sm text-slate-400 mb-4">Add the following CNAME record at your DNS provider:</p>
+          <p class="text-sm text-brand-text-light dark:text-slate-400 mb-4">Add the following CNAME record at your DNS provider:</p>
           <div class="bg-slate-900 rounded-lg p-4 font-mono text-sm">
             <div class="grid grid-cols-3 gap-4 text-slate-500 text-xs mb-2">
               <span>Type</span><span>Name</span><span>Target</span>
@@ -103,7 +103,7 @@
               <span class="text-emerald-400"><%= @site.cname_target %></span>
             </div>
           </div>
-          <p class="text-xs text-slate-500 mt-3">DNS changes can take up to 24 hours to propagate. Status will update automatically.</p>
+          <p class="text-xs text-brand-text-light dark:text-slate-500 mt-3">DNS changes can take up to 24 hours to propagate. Status will update automatically.</p>
         </div>
       <% end %>
 
@@ -116,40 +116,75 @@
       <!-- Add Domain Form -->
       <%= form_with url: portal_site_domain_path(@site), method: :post, scope: :domain, class: "space-y-4" do |f| %>
         <div>
-          <label for="custom_domain" class="block text-sm font-medium text-slate-300 mb-2">Domain Name</label>
+          <label for="custom_domain" class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-2">Domain Name</label>
           <div class="flex gap-3">
             <%= f.text_field :custom_domain,
                 placeholder: "www.example.com",
                 class: "flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-50 placeholder-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 transition-colors",
                 required: true %>
             <%= f.submit "Connect Domain",
-                class: "px-6 py-2.5 bg-indigo-600 text-sm font-semibold text-white rounded-xl hover:bg-indigo-500 transition-colors cursor-pointer" %>
+                class: "px-6 py-2.5 bg-brand-highlight text-sm font-semibold text-white rounded-xl hover:bg-brand-highlight-hover transition-colors cursor-pointer" %>
           </div>
-          <p class="mt-2 text-xs text-slate-500">Enter the full domain (e.g. www.example.com or shop.mybrand.com). After submitting, you'll receive DNS instructions.</p>
+          <p class="mt-2 text-xs text-brand-text-light dark:text-slate-500">Enter the full domain (e.g. www.example.com or shop.mybrand.com). After submitting, you'll receive DNS instructions.</p>
         </div>
       <% end %>
     <% end %>
   </div>
 
   <!-- Pages List -->
-  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 p-8">
-    <h2 class="text-lg font-bold text-slate-50 mb-6">Pages</h2>
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-lg font-bold text-brand-text dark:text-slate-50">Pages</h2>
+      <div class="flex items-center gap-2">
+        <%= button_to generate_portal_site_path(@site), method: :post, class: "inline-flex items-center gap-1.5 px-3 py-2 bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-300 text-xs font-semibold rounded-lg hover:bg-brand-border dark:hover:bg-slate-600 transition-colors", data: { turbo_confirm: @site.pages.any? ? "This will regenerate your site and replace existing content. Continue?" : nil } do %>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Quick Build
+        <% end %>
+        <a href="<%= new_portal_site_page_path(@site) %>" class="inline-flex items-center gap-1.5 px-3 py-2 bg-brand-highlight text-white text-xs font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          New Page
+        </a>
+      </div>
+    </div>
+
     <% if @site.pages.any? %>
-      <div class="divide-y divide-slate-700/50">
-        <% @site.pages.order(:title).each do |page| %>
-          <div class="py-3 flex items-center justify-between">
+      <div class="divide-y divide-brand-border dark:divide-slate-700/50">
+        <% @site.pages.order(:position, :title).each do |page| %>
+          <div class="py-4 flex items-center justify-between">
             <div>
-              <p class="font-medium text-slate-50"><%= page.title %></p>
-              <p class="text-xs text-slate-500">/<%= page.slug %></p>
+              <p class="font-medium text-brand-text dark:text-slate-50"><%= page.title %></p>
+              <p class="text-xs text-brand-text-light dark:text-slate-500">/<%= page.slug %></p>
             </div>
-            <% if @site.published? && @site.subdomain.present? %>
-              <a href="<%= site_preview_path(@site.subdomain) %>/<%= page.slug %>" target="_blank" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">Preview</a>
-            <% end %>
+            <div class="flex items-center gap-2">
+              <% if @site.published? && @site.subdomain.present? %>
+                <a href="<%= site_preview_path(@site.subdomain) %>/<%= page.slug == 'index' ? '' : page.slug %>" target="_blank" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-brand-text-light dark:text-slate-400 hover:text-brand-text dark:hover:text-slate-200 font-medium rounded-md hover:bg-brand-card-alt dark:hover:bg-slate-700 transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  Preview
+                </a>
+              <% end %>
+              <a href="<%= editor_portal_site_page_path(@site, page) %>" class="inline-flex items-center gap-1 px-3 py-1.5 bg-brand-highlight text-white text-xs font-semibold rounded-md hover:bg-brand-highlight-hover transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Edit
+              </a>
+              <%= button_to portal_site_page_path(@site, page), method: :delete, class: "inline-flex items-center px-2 py-1.5 text-xs text-red-500 dark:text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors", data: { turbo_confirm: "Delete this page?" } do %>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              <% end %>
+            </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p class="text-slate-500 text-sm text-center py-4">No pages created yet.</p>
+      <div class="text-center py-8">
+        <div class="w-12 h-12 bg-brand-highlight/10 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-6 h-6 text-brand-highlight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <p class="text-brand-text-muted dark:text-slate-300 text-sm font-medium mb-1">No pages yet</p>
+        <p class="text-brand-text-light dark:text-slate-500 text-xs mb-4">Use Quick Build to generate a complete one-pager in seconds, or create pages manually.</p>
+        <%= button_to generate_portal_site_path(@site), method: :post, class: "inline-flex items-center gap-1.5 px-4 py-2 bg-brand-highlight text-white text-sm font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors" do %>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Quick Build My Site
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>

@@ -2,15 +2,15 @@
 
 <div class="p-8">
   <div class="mb-6">
-    <a href="<%= portal_meta_campaigns_path %>" class="text-sm text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 font-medium">&larr; Back to Campaigns</a>
+    <a href="<%= portal_meta_campaigns_path %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">&larr; Back to Campaigns</a>
   </div>
 
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-50">Create Meta Campaign</h1>
-    <p class="mt-2 text-slate-500 dark:text-slate-400">Build your campaign locally, then push it to Meta Ads when ready.</p>
+    <h1 class="text-3xl font-bold text-brand-text dark:text-slate-50">Create Meta Campaign</h1>
+    <p class="mt-2 text-brand-text-light dark:text-slate-400">Build your campaign locally, then push it to Meta Ads when ready.</p>
   </div>
 
-  <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700/50 p-8 max-w-3xl shadow-sm dark:shadow-none">
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 max-w-3xl shadow-sm dark:shadow-none">
     <%= render "form", form_url: portal_meta_campaigns_path, submit_label: "Create Campaign" %>
   </div>
 </div>

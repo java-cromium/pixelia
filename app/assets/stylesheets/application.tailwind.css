@@ -2,6 +2,31 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-brand-bg: #F2F5EA;
+  --color-brand-highlight: #FFA62B;
+  --color-brand-highlight-hover: #E8941F;
+  --color-brand-text: #160F29;
+  --color-brand-text-muted: #3D3551;
+  --color-brand-text-light: #6B6280;
+  --color-brand-border: #D6DCCB;
+  --color-brand-card: #FFFFFF;
+  --color-brand-card-alt: #E8ECDF;
+
+  /* Override default cyan with #00A6A6-based palette */
+  --color-cyan-50: #E6F7F7;
+  --color-cyan-100: #B3EBEB;
+  --color-cyan-200: #80DFDF;
+  --color-cyan-300: #4DD3D3;
+  --color-cyan-400: #1AC7C7;
+  --color-cyan-500: #00A6A6;
+  --color-cyan-600: #008F8F;
+  --color-cyan-700: #007878;
+  --color-cyan-800: #006161;
+  --color-cyan-900: #004A4A;
+  --color-cyan-950: #003333;
+}
+
 /* Smooth theme transitions */
 @layer base {
   html {

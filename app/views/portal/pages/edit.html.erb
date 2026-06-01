@@ -1,0 +1,45 @@
+<% content_for(:title) { "Edit #{@page.title} — #{@site.name} — Pixelia" } %>
+
+<div class="p-8 max-w-2xl mx-auto">
+  <div class="mb-6">
+    <a href="<%= portal_site_path(@site) %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">&larr; Back to <%= @site.name %></a>
+  </div>
+
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8">
+    <h1 class="text-2xl font-bold text-brand-text dark:text-slate-50 mb-6">Edit Page Settings</h1>
+
+    <%= form_with model: @page, url: portal_site_page_path(@site, @page), method: :patch, class: "space-y-5" do |f| %>
+      <% if @page.errors.any? %>
+        <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+          <p class="text-sm text-red-600 dark:text-red-400 font-medium"><%= pluralize(@page.errors.count, "error") %> prevented this page from being saved:</p>
+          <ul class="mt-2 text-sm text-red-500 dark:text-red-300 list-disc list-inside">
+            <% @page.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <label for="page_title" class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-2">Page Title</label>
+        <%= f.text_field :title, class: "w-full bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 focus:ring-offset-0 transition-colors", required: true %>
+      </div>
+
+      <div>
+        <label for="page_slug" class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-2">URL Slug</label>
+        <%= f.text_field :slug, class: "w-full bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 focus:ring-offset-0 transition-colors", required: true %>
+      </div>
+
+      <div>
+        <label for="page_status" class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-2">Status</label>
+        <%= f.select :status, [["Published", "published"], ["Draft", "draft"]], {}, class: "w-full bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 focus:ring-offset-0 transition-colors" %>
+      </div>
+
+      <div class="pt-4 flex items-center gap-3">
+        <%= f.submit "Save Changes", class: "px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl hover:bg-brand-highlight-hover transition-colors cursor-pointer" %>
+        <a href="<%= editor_portal_site_page_path(@site, @page) %>" class="px-5 py-2.5 bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-300 text-sm font-medium rounded-xl hover:bg-brand-border dark:hover:bg-slate-600 transition-colors">Open Builder</a>
+        <a href="<%= portal_site_path(@site) %>" class="px-5 py-2.5 text-brand-text-muted dark:text-slate-400 text-sm font-medium hover:text-brand-text dark:hover:text-slate-200 transition-colors">Cancel</a>
+      </div>
+    <% end %>
+  </div>
+</div>

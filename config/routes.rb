@@ -32,6 +32,14 @@ Rails.application.routes.draw do
       resources :ecommerce_stores, only: [:index, :show], as: nil
       resources :sites, only: [:index, :show], as: nil do
         resource :domain, only: [:show, :create, :destroy], controller: "domains"
+        resources :pages, controller: "pages", as: nil do
+          member do
+            get :editor
+            get :content
+            put :content
+          end
+        end
+        post :generate, on: :member, controller: "sites", action: "generate"
       end
 
       get  "billing",          to: "billing#show",     as: nil
@@ -104,6 +112,14 @@ Rails.application.routes.draw do
     resources :ecommerce_stores, only: [:index, :show]
     resources :sites, only: [:index, :show] do
       resource :domain, only: [:show, :create, :destroy], controller: "domains"
+      resources :pages, controller: "pages" do
+        member do
+          get :editor
+          get :content
+          put :content
+        end
+      end
+      post :generate, on: :member, controller: "sites", action: "generate"
     end
 
     get  "billing",          to: "billing#show"

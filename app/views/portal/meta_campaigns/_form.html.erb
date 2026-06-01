@@ -11,49 +11,49 @@
 
   <div class="grid sm:grid-cols-2 gap-6">
     <div class="sm:col-span-2">
-      <%= f.label :name, "Campaign Name", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
-      <%= f.text_field :name, class: "w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow", placeholder: "e.g. Summer Sale 2026", required: true %>
+      <%= f.label :name, "Campaign Name", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
+      <%= f.text_field :name, class: "w-full px-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow", placeholder: "e.g. Summer Sale 2026", required: true %>
     </div>
 
     <div>
-      <%= f.label :objective, "Campaign Objective", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
+      <%= f.label :objective, "Campaign Objective", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
       <%= f.select :objective,
           MetaAdCampaign::OBJECTIVES.map { |o| [o.sub("OUTCOME_", "").titleize, o] },
           {},
-          class: "w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+          class: "w-full px-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
     </div>
 
     <div>
-      <%= f.label :daily_budget_cents, "Daily Budget ($)", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
+      <%= f.label :daily_budget_cents, "Daily Budget ($)", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
       <div class="relative">
-        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-brand-text-light dark:text-slate-500">$</span>
         <%= f.number_field :daily_budget_cents,
             value: @campaign.daily_budget_cents ? (@campaign.daily_budget_cents / 100.0).round(2) : nil,
             step: 0.01, min: 1,
-            class: "w-full pl-8 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow",
+            class: "w-full pl-8 pr-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow",
             placeholder: "20.00" %>
       </div>
-      <p class="text-xs text-slate-500 mt-1">Minimum $1.00/day</p>
+      <p class="text-xs text-brand-text-light dark:text-slate-500 mt-1">Minimum $1.00/day</p>
     </div>
 
     <div class="sm:col-span-2">
-      <%= f.label :target_url, "Target URL", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
-      <%= f.url_field :target_url, class: "w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow", placeholder: "https://www.example.com/landing" %>
+      <%= f.label :target_url, "Target URL", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
+      <%= f.url_field :target_url, class: "w-full px-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow", placeholder: "https://www.example.com/landing" %>
     </div>
 
     <div>
-      <%= f.label :start_date, "Start Date", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
-      <%= f.date_field :start_date, class: "w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+      <%= f.label :start_date, "Start Date", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
+      <%= f.date_field :start_date, class: "w-full px-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
     </div>
 
     <div>
-      <%= f.label :end_date, "End Date (optional)", class: "block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" %>
-      <%= f.date_field :end_date, class: "w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+      <%= f.label :end_date, "End Date (optional)", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
+      <%= f.date_field :end_date, class: "w-full px-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
     </div>
   </div>
 
   <div class="pt-4 flex items-center gap-4">
-    <%= f.submit submit_label, class: "px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 transition-all duration-200 cursor-pointer" %>
-    <a href="<%= portal_meta_campaigns_path %>" class="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 font-medium">Cancel</a>
+    <%= f.submit submit_label, class: "px-6 py-3 bg-brand-highlight text-white font-semibold rounded-xl shadow-lg shadow-brand-highlight/25 hover:bg-brand-highlight-hover transition-all duration-200 cursor-pointer" %>
+    <a href="<%= portal_meta_campaigns_path %>" class="text-sm text-brand-text-light dark:text-slate-400 hover:text-brand-text dark:hover:text-slate-300 font-medium">Cancel</a>
   </div>
 <% end %>
