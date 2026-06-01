@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_29_153800) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_01_173100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -26,6 +26,28 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_29_153800) do
     t.datetime "trial_ends_at"
     t.index ["plan"], name: "index_accounts_on_plan"
     t.index ["stripe_customer_id"], name: "index_accounts_on_stripe_customer_id", unique: true
+  end
+
+  create_table "chat_conversations", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
+    t.string "title", default: "New conversation"
+    t.string "status", default: "active", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "updated_at"], name: "index_chat_conversations_on_account_id_and_updated_at"
+    t.index ["account_id"], name: "index_chat_conversations_on_account_id"
+    t.index ["user_id"], name: "index_chat_conversations_on_user_id"
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.bigint "chat_conversation_id", null: false
+    t.string "role", null: false
+    t.text "content", null: false
+    t.integer "tokens_used"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_conversation_id"], name: "index_chat_messages_on_chat_conversation_id"
   end
 
   create_table "ecommerce_stores", force: :cascade do |t|
@@ -261,6 +283,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_29_153800) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "chat_conversations", "accounts"
+  add_foreign_key "chat_conversations", "users"
+  add_foreign_key "chat_messages", "chat_conversations"
   add_foreign_key "ecommerce_stores", "accounts"
   add_foreign_key "google_ad_accounts", "accounts"
   add_foreign_key "google_ad_campaigns", "accounts"

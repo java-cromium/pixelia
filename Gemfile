@@ -68,6 +68,9 @@ gem "omniauth-rails_csrf_protection"
 gem "koala", "~> 3.6"
 gem "omniauth-facebook"
 
+# AI Chat Support
+gem "ruby-openai", "~> 7.0"
+
 # Charts & analytics
 gem "chartkick"
 gem "groupdate"

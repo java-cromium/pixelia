@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   belongs_to :account, optional: true
+  has_many :chat_conversations, dependent: :destroy
 
   enum :role, { super_admin: 0, owner: 1, member: 2 }
 

@@ -1,0 +1,10 @@
+user_msg:
+  chat_conversation: active_chat
+  role: user
+  content: "How do I create a Google Ads campaign?"
+
+assistant_msg:
+  chat_conversation: active_chat
+  role: assistant
+  content: "To create a Google Ads campaign, navigate to Google Ads in the sidebar and click 'New Campaign'."
+  tokens_used: 45

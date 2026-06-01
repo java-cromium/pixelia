@@ -8,6 +8,7 @@ class Account < ApplicationRecord
   has_many :google_ad_campaigns, dependent: :destroy
   has_one  :meta_ad_account, dependent: :destroy
   has_many :meta_ad_campaigns, dependent: :destroy
+  has_many :chat_conversations, dependent: :destroy
 
   PLANS = %w[free starter growth].freeze
   SUBSCRIPTION_STATUSES = %w[trialing active past_due canceled].freeze

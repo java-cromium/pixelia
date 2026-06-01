@@ -27,3 +27,6 @@ application.register("grapesjs-editor", GrapejsEditorController)
 
 import ThemeController from "./theme_controller"
 application.register("theme", ThemeController)
+
+import ChatController from "./chat_controller"
+application.register("chat", ChatController)

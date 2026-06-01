@@ -65,6 +65,11 @@ Rails.application.routes.draw do
       get  "auth/meta_ads/callback", to: "meta_ads_oauth#callback", as: nil
       get  "auth/meta_ads/failure",  to: "meta_ads_oauth#failure", as: nil
       delete "meta_ads/disconnect",  to: "meta_ads_oauth#destroy", as: nil
+
+      # AI Chat
+      resources :chats, controller: "chats", as: nil do
+        member { post :message }
+      end
     end
   end
 
@@ -132,6 +137,11 @@ Rails.application.routes.draw do
     get  "auth/meta_ads/callback", to: "meta_ads_oauth#callback", as: :meta_ads_callback
     get  "auth/meta_ads/failure",  to: "meta_ads_oauth#failure", as: :meta_ads_failure
     delete "meta_ads/disconnect",  to: "meta_ads_oauth#destroy", as: :meta_ads_disconnect
+
+    # AI Chat
+    resources :chats, controller: "chats" do
+      member { post :message }
+    end
   end
 
   scope module: "marketing" do

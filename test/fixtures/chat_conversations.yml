@@ -1,0 +1,11 @@
+active_chat:
+  account: acme
+  user: owner_one
+  title: "Help with campaigns"
+  status: active
+
+archived_chat:
+  account: acme
+  user: owner_one
+  title: "Old question"
+  status: archived
