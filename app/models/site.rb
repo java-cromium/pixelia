@@ -1,6 +1,7 @@
 class Site < ApplicationRecord
   belongs_to :account
   has_many :pages, dependent: :destroy
+  has_one :configuration, class_name: "SiteConfiguration", dependent: :destroy
 
   validates :name, presence: true
   validates :subdomain, uniqueness: true, allow_blank: true,

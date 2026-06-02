@@ -7,6 +7,8 @@ class SitesController < ApplicationController
 
     slug = params[:slug].presence || "home"
     @page = @site.pages.published.find_by(slug: slug)
+    # Fallback: try "index" slug for legacy sites
+    @page ||= @site.pages.published.find_by(slug: "index") if slug == "home"
     return render_not_found unless @page
   end
 

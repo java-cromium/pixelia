@@ -30,3 +30,6 @@ application.register("theme", ThemeController)
 
 import ChatController from "./chat_controller"
 application.register("chat", ChatController)
+
+import BuildWizardController from "./build_wizard_controller"
+application.register("build-wizard", BuildWizardController)

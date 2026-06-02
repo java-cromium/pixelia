@@ -136,10 +136,10 @@
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-lg font-bold text-brand-text dark:text-slate-50">Pages</h2>
       <div class="flex items-center gap-2">
-        <%= button_to generate_portal_site_path(@site), method: :post, class: "inline-flex items-center gap-1.5 px-3 py-2 bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-300 text-xs font-semibold rounded-lg hover:bg-brand-border dark:hover:bg-slate-600 transition-colors", data: { turbo_confirm: @site.pages.any? ? "This will regenerate your site and replace existing content. Continue?" : nil } do %>
+        <a href="<%= build_wizard_portal_site_path(@site) %>" class="inline-flex items-center gap-1.5 px-3 py-2 bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-300 text-xs font-semibold rounded-lg hover:bg-brand-border dark:hover:bg-slate-600 transition-colors">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           Quick Build
-        <% end %>
+        </a>
         <a href="<%= new_portal_site_page_path(@site) %>" class="inline-flex items-center gap-1.5 px-3 py-2 bg-brand-highlight text-white text-xs font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           New Page
@@ -179,11 +179,11 @@
           <svg class="w-6 h-6 text-brand-highlight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
         <p class="text-brand-text-muted dark:text-slate-300 text-sm font-medium mb-1">No pages yet</p>
-        <p class="text-brand-text-light dark:text-slate-500 text-xs mb-4">Use Quick Build to generate a complete one-pager in seconds, or create pages manually.</p>
-        <%= button_to generate_portal_site_path(@site), method: :post, class: "inline-flex items-center gap-1.5 px-4 py-2 bg-brand-highlight text-white text-sm font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors" do %>
+        <p class="text-brand-text-light dark:text-slate-500 text-xs mb-4">Use Quick Build to generate a complete 4-page website in seconds, or create pages manually.</p>
+        <a href="<%= build_wizard_portal_site_path(@site) %>" class="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-highlight text-white text-sm font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           Quick Build My Site
-        <% end %>
+        </a>
       </div>
     <% end %>
   </div>

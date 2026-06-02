@@ -77,7 +77,14 @@ export default class extends Controller {
               })
               return { data, pagesHtml }
             },
-            onLoad: (result) => result,
+            onLoad: (result) => {
+              // If the server returns html/css fallback (generated page, no GrapeJS project data yet)
+              if (result && result.html && !result.pages && !result.assets) {
+                this._htmlFallback = result
+                return {}
+              }
+              return result
+            },
           },
         },
       },
@@ -171,6 +178,16 @@ export default class extends Controller {
       this.saveStatusTarget.textContent = "Save failed"
       this.saveStatusTarget.classList.remove("text-amber-400", "text-slate-500")
       this.saveStatusTarget.classList.add("text-red-400")
+    })
+
+    // After load completes, inject HTML/CSS fallback if present (from generated pages)
+    this.editor.on("storage:end:load", () => {
+      if (this._htmlFallback) {
+        const { html, css } = this._htmlFallback
+        this._htmlFallback = null
+        if (html) this.editor.setComponents(html)
+        if (css) this.editor.setStyle(css)
+      }
     })
   }
 

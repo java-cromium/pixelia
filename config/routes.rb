@@ -39,7 +39,11 @@ Rails.application.routes.draw do
             put :content
           end
         end
-        post :generate, on: :member, controller: "sites", action: "generate"
+        member do
+          get :build_wizard, controller: "sites", action: "build_wizard"
+          post :generate, controller: "sites", action: "generate"
+          post :generate_content, controller: "sites", action: "generate_content"
+        end
       end
 
       get  "billing",          to: "billing#show",     as: nil
@@ -119,7 +123,11 @@ Rails.application.routes.draw do
           put :content
         end
       end
-      post :generate, on: :member, controller: "sites", action: "generate"
+      member do
+        get :build_wizard, controller: "sites", action: "build_wizard"
+        post :generate, controller: "sites", action: "generate"
+        post :generate_content, controller: "sites", action: "generate_content"
+      end
     end
 
     get  "billing",          to: "billing#show"

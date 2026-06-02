@@ -1,0 +1,294 @@
+<% content_for(:title) { "Quick Build — #{@site.name} — Pixelia" } %>
+
+<div class="p-8 max-w-3xl mx-auto" data-controller="build-wizard" data-build-wizard-generate-url-value="<%= generate_content_portal_site_path(@site) %>" data-build-wizard-ai-configured-value="<%= @account.ai_configured? %>">
+  <div class="mb-6">
+    <a href="<%= portal_site_path(@site) %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">&larr; Back to <%= @site.name %></a>
+  </div>
+
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 shadow-sm dark:shadow-none">
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-brand-text dark:text-slate-50">Quick Build Your Website</h1>
+      <p class="mt-1 text-sm text-brand-text-light dark:text-slate-400">Fill in your business details and we'll generate a complete 4-page website for you.</p>
+    </div>
+
+    <% unless @account.ai_configured? %>
+      <div class="mb-6 p-4 bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/30 rounded-xl flex items-start gap-3">
+        <svg class="w-5 h-5 text-purple-600 dark:text-purple-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        <div>
+          <p class="text-sm font-medium text-purple-800 dark:text-purple-300">AI content generation available</p>
+          <p class="text-xs text-purple-600 dark:text-purple-400 mt-0.5">Connect your OpenAI, Gemini, or Claude API key in <a href="<%= portal_settings_path %>" class="underline font-medium">Settings</a> to auto-generate content for each section.</p>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Step Indicators -->
+    <div class="flex items-center gap-2 mb-8">
+      <% ["Business", "Services", "About", "Media", "Location", "FAQs"].each_with_index do |label, i| %>
+        <button type="button" data-build-wizard-target="indicator" data-action="click->build-wizard#goToStep" data-step="<%= i %>"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer <%= i == 0 ? 'bg-brand-highlight text-white' : 'bg-brand-card-alt dark:bg-slate-700 text-brand-text-light dark:text-slate-400' %>">
+          <span class="w-4 h-4 flex items-center justify-center rounded-full text-[10px] font-bold bg-white/20"><%= i + 1 %></span>
+          <%= label %>
+        </button>
+      <% end %>
+    </div>
+
+    <%= form_with model: @configuration, url: generate_portal_site_path(@site), method: :post, local: true, multipart: true, class: "space-y-6" do |f| %>
+
+      <!-- Step 1: Business Basics -->
+      <div data-build-wizard-target="step">
+        <h2 class="text-lg font-semibold text-brand-text dark:text-slate-50 mb-4">Business Information</h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Business Name *</label>
+            <%= f.text_field :business_name, placeholder: "e.g. Acme Digital Agency", class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors", required: true %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Industry</label>
+            <%= f.select :industry, options_for_select([
+              ["Select an industry...", ""],
+              ["Restaurant / Food", "restaurant"],
+              ["Agency / Consulting", "agency"],
+              ["Salon / Beauty", "salon"],
+              ["Health / Fitness", "health"],
+              ["Real Estate", "real_estate"],
+              ["E-commerce / Retail", "ecommerce"],
+              ["Technology / SaaS", "technology"],
+              ["Construction / Trades", "construction"],
+              ["Legal / Finance", "legal"],
+              ["Education", "education"],
+              ["Other", "other"]
+            ], @configuration.industry), {}, class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors" %>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300">Tagline</label>
+              <% if @account.ai_configured? %>
+                <button type="button" data-action="click->build-wizard#generateAi" data-section="tagline" class="ai-generate-btn inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                  Generate with AI
+                </button>
+              <% end %>
+            </div>
+            <%= f.text_field :tagline, placeholder: "e.g. Building digital experiences that convert", data: { build_wizard_target: "taglineField" }, class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors" %>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300">Value Proposition</label>
+              <% if @account.ai_configured? %>
+                <button type="button" data-action="click->build-wizard#generateAi" data-section="value_proposition" class="ai-generate-btn inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                  Generate with AI
+                </button>
+              <% end %>
+            </div>
+            <%= f.text_area :value_proposition, placeholder: "Describe what makes your business unique and why customers should choose you...", rows: 3, data: { build_wizard_target: "valuePropositionField" }, class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors resize-none" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Services -->
+      <div data-build-wizard-target="step" class="hidden">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-lg font-semibold text-brand-text dark:text-slate-50">Your Services</h2>
+          <% if @account.ai_configured? %>
+            <button type="button" data-action="click->build-wizard#generateAi" data-section="services" class="ai-generate-btn inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              Generate with AI
+            </button>
+          <% end %>
+        </div>
+        <p class="text-sm text-brand-text-light dark:text-slate-400 mb-4">Add the services your business offers. These will appear on your Services page and homepage.</p>
+        <div id="services-container" class="space-y-3 mb-4">
+          <% if @configuration.services_array.any? %>
+            <% @configuration.services_array.each do |service| %>
+              <div class="service-entry flex gap-3 items-start p-4 bg-brand-card-alt dark:bg-slate-800 rounded-xl border border-brand-border dark:border-slate-700">
+                <div class="flex-1 space-y-3">
+                  <input type="text" name="site_configuration[services_list][][name]" value="<%= service['name'] %>" placeholder="Service name" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors">
+                  <textarea name="site_configuration[services_list][][description]" placeholder="Brief description" rows="2" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors resize-none"><%= service['description'] %></textarea>
+                </div>
+                <button type="button" data-action="click->build-wizard#removeEntry" class="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+            <% end %>
+          <% else %>
+            <% 3.times do %>
+              <div class="service-entry flex gap-3 items-start p-4 bg-brand-card-alt dark:bg-slate-800 rounded-xl border border-brand-border dark:border-slate-700">
+                <div class="flex-1 space-y-3">
+                  <input type="text" name="site_configuration[services_list][][name]" placeholder="Service name" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors">
+                  <textarea name="site_configuration[services_list][][description]" placeholder="Brief description of this service" rows="2" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors resize-none"></textarea>
+                </div>
+                <button type="button" data-action="click->build-wizard#removeEntry" class="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <button type="button" data-action="click->build-wizard#addService" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-brand-highlight hover:text-brand-highlight-hover transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Add Another Service
+        </button>
+      </div>
+
+      <!-- Step 3: About -->
+      <div data-build-wizard-target="step" class="hidden">
+        <h2 class="text-lg font-semibold text-brand-text dark:text-slate-50 mb-2">About Your Business</h2>
+        <p class="text-sm text-brand-text-light dark:text-slate-400 mb-4">Tell us about your company. This will be used for the About Us page.</p>
+        <div class="space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300">Company Story</label>
+              <% if @account.ai_configured? %>
+                <button type="button" data-action="click->build-wizard#generateAi" data-section="about" class="ai-generate-btn inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                  Generate with AI
+                </button>
+              <% end %>
+            </div>
+            <%= f.text_area :about_content, placeholder: "Share your company's story, mission, and what drives you...", rows: 5, data: { build_wizard_target: "aboutField" }, class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors resize-none" %>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300">Team Information <span class="text-brand-text-light dark:text-slate-500">(optional)</span></label>
+              <% if @account.ai_configured? %>
+                <button type="button" data-action="click->build-wizard#generateAi" data-section="team_info" class="ai-generate-btn inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                  Generate with AI
+                </button>
+              <% end %>
+            </div>
+            <%= f.text_area :team_info, placeholder: "Describe your team, their expertise, and experience...", rows: 3, data: { build_wizard_target: "teamInfoField" }, class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors resize-none" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Media -->
+      <div data-build-wizard-target="step" class="hidden">
+        <h2 class="text-lg font-semibold text-brand-text dark:text-slate-50 mb-2">Media & Visuals</h2>
+        <p class="text-sm text-brand-text-light dark:text-slate-400 mb-4">Add a video or images to enhance your website.</p>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Video URL <span class="text-brand-text-light dark:text-slate-500">(YouTube or Vimeo)</span></label>
+            <%= f.text_field :video_url, placeholder: "https://www.youtube.com/watch?v=... or https://vimeo.com/...", class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors" %>
+            <p class="mt-1.5 text-xs text-brand-text-light dark:text-slate-500">This video will be featured on your homepage hero section.</p>
+          </div>
+          <!-- Hero Image Upload -->
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Hero Image</label>
+            <% if @configuration.hero_image.attached? %>
+              <div class="mb-3 relative inline-block">
+                <%= image_tag @configuration.hero_image, class: "w-full max-w-sm h-40 object-cover rounded-xl border border-brand-border dark:border-slate-700" %>
+                <span class="absolute top-2 right-2 px-2 py-0.5 bg-emerald-500 text-white text-xs font-medium rounded-full">Uploaded</span>
+              </div>
+            <% end %>
+            <div class="relative">
+              <%= f.file_field :hero_image, accept: "image/jpeg,image/png,image/webp,image/gif", class: "block w-full text-sm text-brand-text-muted dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-highlight/10 file:text-brand-highlight hover:file:bg-brand-highlight/20 file:cursor-pointer file:transition-colors" %>
+            </div>
+            <p class="mt-1.5 text-xs text-brand-text-light dark:text-slate-500">This image will be displayed in your homepage hero section. Max 5MB. JPEG, PNG, WebP, or GIF.</p>
+          </div>
+
+          <!-- Gallery Images Upload -->
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Gallery Images <span class="text-brand-text-light dark:text-slate-500">(optional)</span></label>
+            <% if @configuration.gallery_images.attached? %>
+              <div class="flex flex-wrap gap-2 mb-3">
+                <% @configuration.gallery_images.each do |img| %>
+                  <div class="relative">
+                    <%= image_tag img, class: "w-20 h-20 object-cover rounded-lg border border-brand-border dark:border-slate-700" %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+            <div class="relative">
+              <%= f.file_field :gallery_images, accept: "image/jpeg,image/png,image/webp,image/gif", multiple: true, class: "block w-full text-sm text-brand-text-muted dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-highlight/10 file:text-brand-highlight hover:file:bg-brand-highlight/20 file:cursor-pointer file:transition-colors" %>
+            </div>
+            <p class="mt-1.5 text-xs text-brand-text-light dark:text-slate-500">Upload multiple images for an About Us gallery. Max 5MB each.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Location -->
+      <div data-build-wizard-target="step" class="hidden">
+        <h2 class="text-lg font-semibold text-brand-text dark:text-slate-50 mb-2">Location & Contact</h2>
+        <p class="text-sm text-brand-text-light dark:text-slate-400 mb-4">Add your business location for the Contact page map.</p>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Business Address</label>
+            <%= f.text_field :location_address, placeholder: "e.g. 123 Main Street, City, State 12345", class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors" %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Service Area <span class="text-brand-text-light dark:text-slate-500">(if applicable)</span></label>
+            <%= f.text_field :service_area, placeholder: "e.g. Greater Miami Area, Nationwide, etc.", class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors" %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Google Business Profile URL <span class="text-brand-text-light dark:text-slate-500">(optional)</span></label>
+            <%= f.text_field :google_business_profile_url, placeholder: "https://maps.google.com/...", class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors" %>
+            <p class="mt-1.5 text-xs text-brand-text-light dark:text-slate-500">We'll embed an interactive map on your Contact page.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: FAQs -->
+      <div data-build-wizard-target="step" class="hidden">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-lg font-semibold text-brand-text dark:text-slate-50">Frequently Asked Questions</h2>
+          <% if @account.ai_configured? %>
+            <button type="button" data-action="click->build-wizard#generateAi" data-section="faqs" class="ai-generate-btn inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              Generate with AI
+            </button>
+          <% end %>
+        </div>
+        <p class="text-sm text-brand-text-light dark:text-slate-400 mb-4">Add common questions your customers ask. These appear on the homepage.</p>
+        <div id="faqs-container" class="space-y-3 mb-4">
+          <% if @configuration.faqs_array.any? %>
+            <% @configuration.faqs_array.each do |faq| %>
+              <div class="faq-entry flex gap-3 items-start p-4 bg-brand-card-alt dark:bg-slate-800 rounded-xl border border-brand-border dark:border-slate-700">
+                <div class="flex-1 space-y-3">
+                  <input type="text" name="site_configuration[faqs][][question]" value="<%= faq['question'] %>" placeholder="Question" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors">
+                  <textarea name="site_configuration[faqs][][answer]" placeholder="Answer" rows="2" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors resize-none"><%= faq['answer'] %></textarea>
+                </div>
+                <button type="button" data-action="click->build-wizard#removeEntry" class="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+            <% end %>
+          <% else %>
+            <% 3.times do %>
+              <div class="faq-entry flex gap-3 items-start p-4 bg-brand-card-alt dark:bg-slate-800 rounded-xl border border-brand-border dark:border-slate-700">
+                <div class="flex-1 space-y-3">
+                  <input type="text" name="site_configuration[faqs][][question]" placeholder="Question" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors">
+                  <textarea name="site_configuration[faqs][][answer]" placeholder="Answer" rows="2" class="w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-1 focus:ring-brand-highlight/20 transition-colors resize-none"></textarea>
+                </div>
+                <button type="button" data-action="click->build-wizard#removeEntry" class="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <button type="button" data-action="click->build-wizard#addFaq" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-brand-highlight hover:text-brand-highlight-hover transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Add Another FAQ
+        </button>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="pt-6 border-t border-brand-border dark:border-slate-700/50 flex items-center justify-between">
+        <button type="button" data-build-wizard-target="prevBtn" data-action="click->build-wizard#prev" style="display: none;" class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-brand-text-muted dark:text-slate-300 hover:text-brand-text dark:hover:text-slate-50 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Previous
+        </button>
+        <div class="ml-auto flex items-center gap-3">
+          <a href="<%= portal_site_path(@site) %>" class="px-4 py-2.5 text-sm font-medium text-brand-text-light dark:text-slate-400 hover:text-brand-text dark:hover:text-slate-200 transition-colors">Cancel</a>
+          <button type="button" data-build-wizard-target="nextBtn" data-action="click->build-wizard#next" class="inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl hover:bg-brand-highlight-hover transition-colors">
+            Next
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+          <%= f.submit "Generate My Website", data: { build_wizard_target: "submitBtn" }, style: "display: none;", class: "inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl hover:bg-brand-highlight-hover transition-colors cursor-pointer" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

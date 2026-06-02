@@ -37,10 +37,10 @@
                   Edit Site
                 </a>
               <% else %>
-                <%= button_to generate_portal_site_path(site), method: :post, class: "flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-brand-highlight text-white text-xs font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors" do %>
+                <a href="<%= build_wizard_portal_site_path(site) %>" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-brand-highlight text-white text-xs font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                   Quick Build
-                <% end %>
+                </a>
               <% end %>
               <a href="<%= portal_site_path(site) %>" class="inline-flex items-center justify-center px-3 py-2 bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-300 text-xs font-medium rounded-lg hover:bg-brand-border dark:hover:bg-slate-600 transition-colors">
                 Manage

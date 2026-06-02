@@ -120,6 +120,56 @@
     </div>
   </div>
 
+  <!-- AI Provider -->
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 mb-8 shadow-sm dark:shadow-none">
+    <h2 class="text-lg font-bold text-brand-text dark:text-slate-50 mb-2">AI Content Generation</h2>
+    <p class="text-sm text-brand-text-light dark:text-slate-400 mb-6">Connect your own AI account to generate website content in the Quick Build wizard.</p>
+
+    <%= form_with model: @account, url: portal_settings_path, method: :patch, class: "space-y-5" do |f| %>
+      <div>
+        <%= f.label :ai_provider, "AI Provider", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
+        <%= f.select :ai_provider,
+          options_for_select([
+            ["Select a provider...", ""],
+            ["OpenAI (ChatGPT)", "openai"],
+            ["Google Gemini", "gemini"],
+            ["Anthropic (Claude)", "claude"]
+          ], @account.ai_provider),
+          {},
+          class: "w-full max-w-md px-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+      </div>
+
+      <div>
+        <%= f.label :ai_api_key, "API Key", class: "block text-sm font-semibold text-brand-text-muted dark:text-slate-300 mb-2" %>
+        <%= f.password_field :ai_api_key,
+          placeholder: @account.ai_api_key.present? ? "••••••••••••••••" : "Paste your API key here",
+          value: "",
+          class: "w-full max-w-md px-4 py-3 rounded-xl bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+        <p class="mt-1.5 text-xs text-brand-text-light dark:text-slate-500">
+          Your key is encrypted and stored securely. Leave blank to keep your existing key.
+          <% if @account.ai_provider == "openai" %>
+            <a href="https://platform.openai.com/api-keys" target="_blank" class="text-brand-highlight hover:underline">Get an OpenAI key &rarr;</a>
+          <% elsif @account.ai_provider == "gemini" %>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-brand-highlight hover:underline">Get a Gemini key &rarr;</a>
+          <% elsif @account.ai_provider == "claude" %>
+            <a href="https://console.anthropic.com/settings/keys" target="_blank" class="text-brand-highlight hover:underline">Get a Claude key &rarr;</a>
+          <% end %>
+        </p>
+      </div>
+
+      <% if @account.ai_configured? %>
+        <div class="flex items-center gap-2 p-3 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 rounded-xl">
+          <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span class="text-sm font-medium text-emerald-700 dark:text-emerald-400"><%= @account.ai_provider.capitalize %> connected — AI content generation is available in Quick Build.</span>
+        </div>
+      <% end %>
+
+      <div class="pt-2">
+        <%= f.submit "Save AI Settings", class: "px-6 py-3 bg-brand-highlight text-white font-semibold rounded-xl shadow-lg shadow-brand-highlight/25 hover:bg-brand-highlight-hover transition-all duration-200 cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+
   <!-- Team Members -->
   <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-8 shadow-sm dark:shadow-none">
     <h2 class="text-lg font-bold text-brand-text dark:text-slate-50 mb-6">Team Members</h2>
