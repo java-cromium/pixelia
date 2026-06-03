@@ -1,33 +1,154 @@
+require "net/http"
+
 class SiteGeneratorService
   include Rails.application.routes.url_helpers
 
   PALETTES = [
-    { primary: "#6366f1", accent: "#06b6d4", bg: "#0f172a", card: "#1e293b", text: "#f8fafc", muted: "#94a3b8", border: "#334155" },
-    { primary: "#f97316", accent: "#eab308", bg: "#1c1917", card: "#292524", text: "#fafaf9", muted: "#a8a29e", border: "#44403c" },
-    { primary: "#ec4899", accent: "#8b5cf6", bg: "#0f0518", card: "#1a0a2e", text: "#faf5ff", muted: "#a78bfa", border: "#3b0764" },
-    { primary: "#10b981", accent: "#06b6d4", bg: "#022c22", card: "#064e3b", text: "#ecfdf5", muted: "#6ee7b7", border: "#065f46" },
-    { primary: "#3b82f6", accent: "#8b5cf6", bg: "#0f172a", card: "#1e293b", text: "#f8fafc", muted: "#93c5fd", border: "#1e3a5f" },
-    { primary: "#f43f5e", accent: "#fb923c", bg: "#1a0005", card: "#2d0a0a", text: "#fff1f2", muted: "#fda4af", border: "#4c0519" },
-    { primary: "#14b8a6", accent: "#a3e635", bg: "#042f2e", card: "#134e4a", text: "#f0fdfa", muted: "#5eead4", border: "#115e59" },
-    { primary: "#f59e0b", accent: "#ef4444", bg: "#1c1917", card: "#292524", text: "#fffbeb", muted: "#fcd34d", border: "#44403c" },
+    # ─── DARK BACKGROUNDS ───────────────────────────────────────────
+    # Indigo / Cyan
+    { primary: "#6366f1", accent: "#06b6d4", bg: "#0f172a", card: "#1e293b", text: "#f8fafc", muted: "#94a3b8", border: "#334155", name: "Midnight Indigo" },
+    # Orange / Yellow
+    { primary: "#f97316", accent: "#eab308", bg: "#1c1917", card: "#292524", text: "#fafaf9", muted: "#a8a29e", border: "#44403c", name: "Ember Gold" },
+    # Pink / Purple
+    { primary: "#ec4899", accent: "#8b5cf6", bg: "#0f0518", card: "#1a0a2e", text: "#faf5ff", muted: "#a78bfa", border: "#3b0764", name: "Neon Blossom" },
+    # Emerald / Cyan
+    { primary: "#10b981", accent: "#06b6d4", bg: "#022c22", card: "#064e3b", text: "#ecfdf5", muted: "#6ee7b7", border: "#065f46", name: "Forest Teal" },
+    # Blue / Purple
+    { primary: "#3b82f6", accent: "#8b5cf6", bg: "#0f172a", card: "#1e293b", text: "#f8fafc", muted: "#93c5fd", border: "#1e3a5f", name: "Electric Violet" },
+    # Rose / Orange
+    { primary: "#f43f5e", accent: "#fb923c", bg: "#1a0005", card: "#2d0a0a", text: "#fff1f2", muted: "#fda4af", border: "#4c0519", name: "Cherry Blaze" },
+    # Teal / Lime
+    { primary: "#14b8a6", accent: "#a3e635", bg: "#042f2e", card: "#134e4a", text: "#f0fdfa", muted: "#5eead4", border: "#115e59", name: "Tropical Mint" },
+    # Amber / Red
+    { primary: "#f59e0b", accent: "#ef4444", bg: "#1c1917", card: "#292524", text: "#fffbeb", muted: "#fcd34d", border: "#44403c", name: "Golden Flame" },
+    # Violet / Rose
+    { primary: "#8b5cf6", accent: "#f43f5e", bg: "#0c0a1d", card: "#1c1836", text: "#f5f3ff", muted: "#c4b5fd", border: "#2e1065", name: "Royal Magenta" },
+    # Sky / Emerald
+    { primary: "#0ea5e9", accent: "#10b981", bg: "#0c1929", card: "#172b45", text: "#f0f9ff", muted: "#7dd3fc", border: "#0c4a6e", name: "Ocean Breeze" },
+    # Lime / Yellow
+    { primary: "#84cc16", accent: "#facc15", bg: "#1a2e05", card: "#2d4a0e", text: "#f7fee7", muted: "#bef264", border: "#365314", name: "Acid Green" },
+    # Fuchsia / Cyan
+    { primary: "#d946ef", accent: "#22d3ee", bg: "#1a0527", card: "#2e0a40", text: "#fdf4ff", muted: "#e879f9", border: "#4a044e", name: "Cyber Punk" },
+    # Red / Amber
+    { primary: "#ef4444", accent: "#f59e0b", bg: "#1c0404", card: "#2d0808", text: "#fef2f2", muted: "#fca5a5", border: "#450a0a", name: "Crimson Sun" },
+    # Slate / Indigo
+    { primary: "#6366f1", accent: "#a5b4fc", bg: "#020617", card: "#0f172a", text: "#f1f5f9", muted: "#94a3b8", border: "#1e293b", name: "Deep Space" },
+    # Cyan / Pink
+    { primary: "#06b6d4", accent: "#f472b6", bg: "#083344", card: "#0e4f5e", text: "#ecfeff", muted: "#67e8f9", border: "#155e75", name: "Aqua Coral" },
+    # Green / Orange
+    { primary: "#22c55e", accent: "#f97316", bg: "#052e16", card: "#0b4d29", text: "#f0fdf4", muted: "#86efac", border: "#166534", name: "Jungle Fire" },
+    # Purple / Teal
+    { primary: "#a855f7", accent: "#2dd4bf", bg: "#0f051d", card: "#1c0e35", text: "#faf5ff", muted: "#c084fc", border: "#3b0764", name: "Mystic Aurora" },
+    # Blue / Lime
+    { primary: "#2563eb", accent: "#a3e635", bg: "#0a1628", card: "#152442", text: "#eff6ff", muted: "#93c5fd", border: "#1e3a5f", name: "Arctic Neon" },
+    # Rose / Violet
+    { primary: "#fb7185", accent: "#a78bfa", bg: "#1c0812", card: "#2d1020", text: "#fff1f2", muted: "#fda4af", border: "#4c0519", name: "Blush Plum" },
+    # Amber / Emerald
+    { primary: "#fbbf24", accent: "#34d399", bg: "#1c1a05", card: "#2d2b0e", text: "#fffbeb", muted: "#fde68a", border: "#422006", name: "Solar Garden" },
+    # Indigo / Orange
+    { primary: "#4f46e5", accent: "#fb923c", bg: "#0f0e2a", card: "#1e1c42", text: "#eef2ff", muted: "#a5b4fc", border: "#312e81", name: "Dusk Ember" },
+    # Teal / Purple
+    { primary: "#0d9488", accent: "#a855f7", bg: "#042f2e", card: "#0a4744", text: "#f0fdfa", muted: "#5eead4", border: "#115e59", name: "Jade Amethyst" },
+    # Sky / Rose
+    { primary: "#38bdf8", accent: "#fb7185", bg: "#0c1929", card: "#152d47", text: "#f0f9ff", muted: "#7dd3fc", border: "#0c4a6e", name: "Frost Rose" },
+    # Lime / Fuchsia
+    { primary: "#a3e635", accent: "#e879f9", bg: "#1a2e05", card: "#2a4a0d", text: "#f7fee7", muted: "#d9f99d", border: "#3f6212", name: "Electric Garden" },
+    # Warm Neutral
+    { primary: "#d97706", accent: "#b45309", bg: "#1c1917", card: "#292524", text: "#fef3c7", muted: "#d6d3d1", border: "#44403c", name: "Warm Earth" },
+
+    # ─── LIGHT BACKGROUNDS ──────────────────────────────────────────
+    # Blue / White
+    { primary: "#2563eb", accent: "#0891b2", bg: "#ffffff", card: "#f8fafc", text: "#0f172a", muted: "#64748b", border: "#e2e8f0", name: "Clean Blue" },
+    # Indigo / Light
+    { primary: "#4f46e5", accent: "#7c3aed", bg: "#fafafa", card: "#ffffff", text: "#1e1b4b", muted: "#6b7280", border: "#e5e7eb", name: "Soft Indigo" },
+    # Emerald / Light
+    { primary: "#059669", accent: "#0d9488", bg: "#ffffff", card: "#f0fdf4", text: "#064e3b", muted: "#6b7280", border: "#d1fae5", name: "Fresh Mint" },
+    # Rose / Light
+    { primary: "#e11d48", accent: "#be185d", bg: "#fffbfb", card: "#fff1f2", text: "#1c1917", muted: "#6b7280", border: "#fecdd3", name: "Warm Rose" },
+    # Orange / Light
+    { primary: "#ea580c", accent: "#dc2626", bg: "#fffaf5", card: "#fff7ed", text: "#1c1917", muted: "#6b7280", border: "#fed7aa", name: "Sunset Cream" },
+    # Purple / Light
+    { primary: "#7c3aed", accent: "#db2777", bg: "#faf5ff", card: "#ffffff", text: "#1e1b4b", muted: "#6b7280", border: "#e9d5ff", name: "Lavender Dream" },
+    # Teal / Light
+    { primary: "#0f766e", accent: "#065f46", bg: "#f0fdfa", card: "#ffffff", text: "#042f2e", muted: "#6b7280", border: "#ccfbf1", name: "Sea Glass" },
+    # Slate / Light
+    { primary: "#334155", accent: "#6366f1", bg: "#ffffff", card: "#f8fafc", text: "#0f172a", muted: "#64748b", border: "#e2e8f0", name: "Modern Slate" },
+    # Amber / Light
+    { primary: "#b45309", accent: "#92400e", bg: "#fffbeb", card: "#ffffff", text: "#1c1917", muted: "#78716c", border: "#fde68a", name: "Honey Glow" },
+    # Sky / Light
+    { primary: "#0284c7", accent: "#0369a1", bg: "#f0f9ff", card: "#ffffff", text: "#0c4a6e", muted: "#64748b", border: "#bae6fd", name: "Clear Sky" },
+    # Coral / Light
+    { primary: "#f43f5e", accent: "#f97316", bg: "#ffffff", card: "#fff5f5", text: "#1c1917", muted: "#6b7280", border: "#fecaca", name: "Living Coral" },
+    # Forest / Light
+    { primary: "#15803d", accent: "#4d7c0f", bg: "#f7fee7", card: "#ffffff", text: "#14532d", muted: "#6b7280", border: "#bbf7d0", name: "Garden Path" },
+    # Navy / Light
+    { primary: "#1e40af", accent: "#1d4ed8", bg: "#ffffff", card: "#eff6ff", text: "#172554", muted: "#64748b", border: "#bfdbfe", name: "Navy Crisp" },
+    # Plum / Light
+    { primary: "#7e22ce", accent: "#a21caf", bg: "#fdf4ff", card: "#ffffff", text: "#3b0764", muted: "#6b7280", border: "#f0abfc", name: "Plum Blossom" },
+    # Rust / Light
+    { primary: "#c2410c", accent: "#9a3412", bg: "#fff7ed", card: "#ffffff", text: "#431407", muted: "#78716c", border: "#fdba74", name: "Terracotta" },
+    # Sage / Light
+    { primary: "#4d7c0f", accent: "#15803d", bg: "#f7fee7", card: "#ffffff", text: "#1a2e05", muted: "#6b7280", border: "#d9f99d", name: "Sage Meadow" },
+    # Charcoal / Light
+    { primary: "#18181b", accent: "#3f3f46", bg: "#fafafa", card: "#ffffff", text: "#18181b", muted: "#71717a", border: "#e4e4e7", name: "Monochrome" },
+    # Cyan / Light
+    { primary: "#0891b2", accent: "#0e7490", bg: "#ecfeff", card: "#ffffff", text: "#164e63", muted: "#64748b", border: "#a5f3fc", name: "Aqua Fresh" },
+    # Wine / Light
+    { primary: "#9f1239", accent: "#be123c", bg: "#fff1f2", card: "#ffffff", text: "#4c0519", muted: "#6b7280", border: "#fda4af", name: "Burgundy" },
+    # Electric / Light
+    { primary: "#4f46e5", accent: "#06b6d4", bg: "#ffffff", card: "#f5f3ff", text: "#1e1b4b", muted: "#6b7280", border: "#c7d2fe", name: "Vibrant Pro" },
+    # Gold / Light
+    { primary: "#a16207", accent: "#854d0e", bg: "#fefce8", card: "#ffffff", text: "#422006", muted: "#78716c", border: "#fef08a", name: "Premium Gold" },
+    # Ocean / Light
+    { primary: "#1e3a5f", accent: "#0c4a6e", bg: "#f0f9ff", card: "#ffffff", text: "#0c4a6e", muted: "#64748b", border: "#bae6fd", name: "Deep Ocean" },
+    # Peach / Light
+    { primary: "#ea580c", accent: "#dc2626", bg: "#fffbeb", card: "#ffffff", text: "#431407", muted: "#78716c", border: "#fde68a", name: "Peach Sunset" },
+    # Minimal Dark
+    { primary: "#ffffff", accent: "#a1a1aa", bg: "#09090b", card: "#18181b", text: "#fafafa", muted: "#a1a1aa", border: "#27272a", name: "Noir" },
+    # Minimal Light
+    { primary: "#09090b", accent: "#71717a", bg: "#ffffff", card: "#fafafa", text: "#09090b", muted: "#71717a", border: "#e4e4e7", name: "Paper" },
   ].freeze
 
   FONT_COMBOS = [
-    { heading: "Inter", body: "Inter" },
-    { heading: "Poppins", body: "Inter" },
-    { heading: "Space Grotesk", body: "Inter" },
-    { heading: "Outfit", body: "Inter" },
-    { heading: "Sora", body: "Inter" },
-    { heading: "DM Sans", body: "DM Sans" },
-    { heading: "Montserrat", body: "Open Sans" },
-    { heading: "Playfair Display", body: "Lato" },
+    { heading: "Inter", body: "Inter", name: "Inter" },
+    { heading: "Poppins", body: "Inter", name: "Poppins + Inter" },
+    { heading: "Space Grotesk", body: "Inter", name: "Space Grotesk" },
+    { heading: "Outfit", body: "Inter", name: "Outfit" },
+    { heading: "Sora", body: "Inter", name: "Sora" },
+    { heading: "DM Sans", body: "DM Sans", name: "DM Sans" },
+    { heading: "Montserrat", body: "Open Sans", name: "Montserrat" },
+    { heading: "Playfair Display", body: "Lato", name: "Playfair Display" },
+    { heading: "Raleway", body: "Open Sans", name: "Raleway" },
+    { heading: "Nunito", body: "Nunito Sans", name: "Nunito" },
+    { heading: "Josefin Sans", body: "Lato", name: "Josefin Sans" },
+    { heading: "Manrope", body: "Inter", name: "Manrope" },
+    { heading: "Plus Jakarta Sans", body: "Inter", name: "Jakarta Sans" },
+    { heading: "Clash Display", body: "DM Sans", name: "Clash Display" },
+    { heading: "Cabinet Grotesk", body: "Inter", name: "Cabinet Grotesk" },
+    { heading: "General Sans", body: "Inter", name: "General Sans" },
+    { heading: "Satoshi", body: "Inter", name: "Satoshi" },
+    { heading: "Bricolage Grotesque", body: "Inter", name: "Bricolage" },
+    { heading: "Fraunces", body: "Commissioner", name: "Fraunces" },
+    { heading: "Libre Baskerville", body: "Source Sans 3", name: "Baskerville" },
+    { heading: "Cormorant Garamond", body: "Proza Libre", name: "Cormorant" },
+    { heading: "Merriweather", body: "Open Sans", name: "Merriweather" },
+    { heading: "Bebas Neue", body: "Inter", name: "Bebas Neue" },
+    { heading: "Oswald", body: "Lato", name: "Oswald" },
   ].freeze
 
   def initialize(site, configuration = nil)
     @site = site
     @config = configuration || site.configuration
-    @palette = PALETTES.sample
-    @fonts = FONT_COMBOS.sample
+    @palette = if @config&.color_palette.present? && PALETTES[@config.color_palette]
+                 PALETTES[@config.color_palette]
+               else
+                 PALETTES.sample
+               end
+    @fonts = if @config&.font_combo.present? && FONT_COMBOS[@config.font_combo]
+               FONT_COMBOS[@config.font_combo]
+             else
+               FONT_COMBOS.sample
+             end
     @business_name = @config&.business_name.presence || site.name.presence || "Your Business"
     @tagline = @config&.tagline.presence || "Professional solutions tailored to your needs"
     @value_prop = @config&.value_proposition.presence || "Let us help you grow your business with proven strategies and modern tools."
@@ -41,6 +162,7 @@ class SiteGeneratorService
     @google_maps_url = @config&.google_business_profile_url.presence
     @hero_image_url = @config&.hero_image&.attached? ? rails_blob_path(@config.hero_image, only_path: true) : nil
     @gallery_image_urls = @config&.gallery_images&.attached? ? @config.gallery_images.map { |img| rails_blob_path(img, only_path: true) } : []
+    @logo_url = @config&.logo_image&.attached? ? rails_blob_path(@config.logo_image, only_path: true) : nil
     # Base path for internal links (preview mode vs custom domain)
     @base_path = site.subdomain.present? ? "/preview/#{site.subdomain}" : ""
   end
@@ -280,7 +402,7 @@ class SiteGeneratorService
     <<~HTML
       <nav class="navbar">
         <div class="nav-container">
-          <a href="#{@base_path}/home" class="nav-logo">#{@business_name}</a>
+          <a href="#{@base_path}/home" class="nav-logo">#{@logo_url ? "<img src=\"#{@logo_url}\" alt=\"#{@business_name}\" style=\"height: 36px; width: auto;\">" : @business_name}</a>
           <div class="nav-links">
             <a href="#{@base_path}/home" class="nav-link">Home</a>
             <a href="#{@base_path}/services" class="nav-link">Services</a>
@@ -968,6 +1090,9 @@ class SiteGeneratorService
     if url.include?("youtube.com/watch")
       video_id = url[/[?&]v=([^&]+)/, 1]
       "https://www.youtube.com/embed/#{video_id}"
+    elsif url.include?("youtube.com/shorts/")
+      video_id = url.split("shorts/").last.split("?").first
+      "https://www.youtube.com/embed/#{video_id}"
     elsif url.include?("youtu.be/")
       video_id = url.split("youtu.be/").last.split("?").first
       "https://www.youtube.com/embed/#{video_id}"
@@ -980,28 +1105,49 @@ class SiteGeneratorService
   end
 
   def extract_google_maps_embed(url)
+    # Resolve shortened URLs (maps.app.goo.gl, goo.gl) by following redirects
+    resolved_url = resolve_short_url(url)
+
     # Extract a searchable query from various Google Maps URL formats
     query = nil
 
-    if url =~ %r{/maps/place/([^/@]+)}
+    if resolved_url =~ %r{/maps/place/([^/@]+)}
       # https://www.google.com/maps/place/Place+Name/...
       query = URI.decode_www_form_component($1.gsub("+", " "))
-    elsif url =~ %r{/@(-?\d+\.\d+),(-?\d+\.\d+)}
+    elsif resolved_url =~ %r{/@(-?\d+\.\d+),(-?\d+\.\d+)}
       # URL contains coordinates: .../@lat,lng,...
       query = "#{$1},#{$2}"
-    elsif url =~ /[?&]q=([^&]+)/
+    elsif resolved_url =~ /[?&]q=([^&]+)/
       # URL has ?q= parameter
       query = URI.decode_www_form_component($1)
-    elsif url =~ /[?&]cid=(\d+)/
+    elsif resolved_url =~ /[?&]cid=(\d+)/
       # Business Profile CID — use as-is with Google search
-      query = url
+      query = resolved_url
     end
 
     if query.present?
       "https://maps.google.com/maps?q=#{CGI.escape(query)}&output=embed"
     else
-      # Fallback: use the whole URL as a search query for short links / unknown formats
-      "https://maps.google.com/maps?q=#{CGI.escape(url)}&output=embed"
+      # Fallback: use the location address if available, otherwise the URL
+      fallback = @location_address.presence || resolved_url
+      "https://maps.google.com/maps?q=#{CGI.escape(fallback)}&output=embed"
     end
+  end
+
+  def resolve_short_url(url)
+    return url unless url.include?("goo.gl") || url.include?("bit.ly") || url.include?("maps.app")
+
+    uri = URI.parse(url)
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: 3, read_timeout: 3) do |http|
+      http.head(uri.request_uri)
+    end
+
+    if response.is_a?(Net::HTTPRedirection) && response["location"]
+      response["location"]
+    else
+      url
+    end
+  rescue StandardError
+    url
   end
 end

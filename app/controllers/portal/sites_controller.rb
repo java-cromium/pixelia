@@ -18,7 +18,14 @@ class Portal::SitesController < Portal::BaseController
     @site = @account.sites.find(params[:id])
     @configuration = @site.configuration || @site.build_configuration
 
-    if @configuration.update(configuration_params)
+    cleaned_params = configuration_params
+    # Remove blank gallery_images entries (browsers submit [""] for empty file inputs)
+    if cleaned_params[:gallery_images].present?
+      cleaned_params[:gallery_images] = cleaned_params[:gallery_images].reject(&:blank?)
+      cleaned_params.delete(:gallery_images) if cleaned_params[:gallery_images].empty?
+    end
+
+    if @configuration.update(cleaned_params)
       generator = SiteGeneratorService.new(@site, @configuration)
       generator.generate!
       redirect_to portal_site_path(@site), notice: "Site generated! Your 4-page website is ready to customize."
@@ -65,7 +72,8 @@ class Portal::SitesController < Portal::BaseController
       :about_content, :team_info, :video_url,
       :location_address, :location_lat, :location_lng,
       :service_area, :google_business_profile_url,
-      :hero_image, gallery_images: [],
+      :color_palette, :font_combo,
+      :hero_image, :logo_image, gallery_images: [],
       services_list: [:name, :description],
       faqs: [:question, :answer]
     )

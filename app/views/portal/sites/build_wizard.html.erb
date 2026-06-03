@@ -23,7 +23,7 @@
 
     <!-- Step Indicators -->
     <div class="flex items-center gap-2 mb-8">
-      <% ["Business", "Services", "About", "Media", "Location", "FAQs"].each_with_index do |label, i| %>
+      <% ["Business", "Services", "About", "Media", "Location", "FAQs", "Design"].each_with_index do |label, i| %>
         <button type="button" data-build-wizard-target="indicator" data-action="click->build-wizard#goToStep" data-step="<%= i %>"
           class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer <%= i == 0 ? 'bg-brand-highlight text-white' : 'bg-brand-card-alt dark:bg-slate-700 text-brand-text-light dark:text-slate-400' %>">
           <span class="w-4 h-4 flex items-center justify-center rounded-full text-[10px] font-bold bg-white/20"><%= i + 1 %></span>
@@ -173,10 +173,25 @@
             <%= f.text_field :video_url, placeholder: "https://www.youtube.com/watch?v=... or https://vimeo.com/...", class: "w-full bg-white dark:bg-slate-900 border border-brand-border dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-brand-text dark:text-slate-50 placeholder-brand-text-light dark:placeholder-slate-600 focus:border-brand-highlight focus:ring-2 focus:ring-brand-highlight/20 transition-colors" %>
             <p class="mt-1.5 text-xs text-brand-text-light dark:text-slate-500">This video will be featured on your homepage hero section.</p>
           </div>
+          <!-- Logo Upload -->
+          <div>
+            <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Logo <span class="text-brand-text-light dark:text-slate-500">(optional)</span></label>
+            <% if @configuration.logo_image.attached? && @configuration.logo_image.blob&.persisted? %>
+              <div class="mb-3 relative inline-block p-3 bg-slate-100 dark:bg-slate-800 rounded-xl border border-brand-border dark:border-slate-700">
+                <%= image_tag @configuration.logo_image, class: "h-10 w-auto" %>
+                <span class="absolute -top-1 -right-1 px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] font-medium rounded-full">✓</span>
+              </div>
+            <% end %>
+            <div class="relative">
+              <%= f.file_field :logo_image, accept: "image/jpeg,image/png,image/webp,image/svg+xml", class: "block w-full text-sm text-brand-text-muted dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-highlight/10 file:text-brand-highlight hover:file:bg-brand-highlight/20 file:cursor-pointer file:transition-colors" %>
+            </div>
+            <p class="mt-1.5 text-xs text-brand-text-light dark:text-slate-500">Landscape format recommended (280×80px, 3.5:1 ratio). Max 2MB. PNG or SVG preferred for transparency.</p>
+          </div>
+
           <!-- Hero Image Upload -->
           <div>
             <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Hero Image</label>
-            <% if @configuration.hero_image.attached? %>
+            <% if @configuration.hero_image.attached? && @configuration.hero_image.blob&.persisted? %>
               <div class="mb-3 relative inline-block">
                 <%= image_tag @configuration.hero_image, class: "w-full max-w-sm h-40 object-cover rounded-xl border border-brand-border dark:border-slate-700" %>
                 <span class="absolute top-2 right-2 px-2 py-0.5 bg-emerald-500 text-white text-xs font-medium rounded-full">Uploaded</span>
@@ -191,7 +206,7 @@
           <!-- Gallery Images Upload -->
           <div>
             <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-1.5">Gallery Images <span class="text-brand-text-light dark:text-slate-500">(optional)</span></label>
-            <% if @configuration.gallery_images.attached? %>
+            <% if @configuration.gallery_images.attached? && @configuration.gallery_images.all? { |img| img.blob&.persisted? } %>
               <div class="flex flex-wrap gap-2 mb-3">
                 <% @configuration.gallery_images.each do |img| %>
                   <div class="relative">
@@ -272,6 +287,49 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Add Another FAQ
         </button>
+      </div>
+
+      <!-- Step 7: Design -->
+      <div data-build-wizard-target="step" class="hidden">
+        <h2 class="text-lg font-semibold text-brand-text dark:text-slate-50 mb-2">Design & Style</h2>
+        <p class="text-sm text-brand-text-light dark:text-slate-400 mb-6">Choose a color palette and font combination for your website. Leave unselected for a random style.</p>
+
+        <!-- Color Palette Selection -->
+        <div class="mb-8">
+          <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-3">Color Palette <span class="text-brand-text-light dark:text-slate-500">(optional)</span></label>
+          <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-[320px] overflow-y-auto p-1" data-build-wizard-target="paletteGrid">
+            <% SiteGeneratorService::PALETTES.each_with_index do |palette, idx| %>
+              <label class="cursor-pointer group">
+                <input type="radio" name="site_configuration[color_palette]" value="<%= idx %>" class="sr-only peer" <%= @configuration.color_palette == idx ? 'checked' : '' %>>
+                <div class="relative rounded-xl border-2 border-brand-border dark:border-slate-700 peer-checked:border-brand-highlight peer-checked:ring-2 peer-checked:ring-brand-highlight/30 hover:border-brand-highlight/50 transition-all p-1.5">
+                  <div class="flex gap-0.5 h-8 rounded-lg overflow-hidden">
+                    <div style="background: <%= palette[:bg] %>; flex: 2;" class="rounded-l"></div>
+                    <div style="background: <%= palette[:primary] %>; flex: 1;"></div>
+                    <div style="background: <%= palette[:accent] %>; flex: 1;"></div>
+                    <div style="background: <%= palette[:card] %>; flex: 1;" class="rounded-r"></div>
+                  </div>
+                  <p class="text-[10px] text-brand-text-light dark:text-slate-500 mt-1 text-center truncate"><%= palette[:name] %></p>
+                </div>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Font Combo Selection -->
+        <div>
+          <label class="block text-sm font-medium text-brand-text-muted dark:text-slate-300 mb-3">Font Combination <span class="text-brand-text-light dark:text-slate-500">(optional)</span></label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-[280px] overflow-y-auto p-1" data-build-wizard-target="fontGrid">
+            <% SiteGeneratorService::FONT_COMBOS.each_with_index do |font, idx| %>
+              <label class="cursor-pointer group">
+                <input type="radio" name="site_configuration[font_combo]" value="<%= idx %>" class="sr-only peer" <%= @configuration.font_combo == idx ? 'checked' : '' %>>
+                <div class="rounded-xl border-2 border-brand-border dark:border-slate-700 peer-checked:border-brand-highlight peer-checked:ring-2 peer-checked:ring-brand-highlight/30 hover:border-brand-highlight/50 transition-all p-3 text-center">
+                  <p class="text-sm font-bold text-brand-text dark:text-slate-50" style="font-family: '<%= font[:heading] %>', sans-serif;">Aa</p>
+                  <p class="text-[10px] text-brand-text-light dark:text-slate-500 mt-1 truncate"><%= font[:name] %></p>
+                </div>
+              </label>
+            <% end %>
+          </div>
+        </div>
       </div>
 
       <!-- Navigation Buttons -->
