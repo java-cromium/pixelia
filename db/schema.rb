@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_03_150525) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_03_163310) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -296,6 +296,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_150525) do
     t.datetime "updated_at", null: false
     t.integer "color_palette"
     t.integer "font_combo"
+    t.string "phone_number"
     t.index ["site_id"], name: "index_site_configurations_on_site_id"
   end
 

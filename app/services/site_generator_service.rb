@@ -150,6 +150,7 @@ class SiteGeneratorService
                FONT_COMBOS.sample
              end
     @business_name = @config&.business_name.presence || site.name.presence || "Your Business"
+    @phone_number = @config&.phone_number.presence
     @tagline = @config&.tagline.presence || "Professional solutions tailored to your needs"
     @value_prop = @config&.value_proposition.presence || "Let us help you grow your business with proven strategies and modern tools."
     @services = @config&.services_array&.select { |s| s["name"].present? } || []
@@ -684,6 +685,29 @@ class SiteGeneratorService
           </div>
         </div>
       </footer>
+      #{build_mobile_floating_buttons}
+    HTML
+  end
+
+  def build_mobile_floating_buttons
+    return "" unless @phone_number.present?
+
+    # Clean phone number for tel: link (remove spaces, parentheses, dashes)
+    clean_phone = @phone_number.gsub(/[^0-9+]/, "")
+
+    <<~HTML
+      <div class="mobile-floating-buttons">
+        <a href="tel:#{clean_phone}" class="floating-btn floating-btn-call" aria-label="Call us">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+        </a>
+        <a href="#{@base_path}/contact" class="floating-btn floating-btn-contact" aria-label="Contact us">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+        </a>
+      </div>
     HTML
   end
 
@@ -1080,6 +1104,49 @@ class SiteGeneratorService
         .cta-title { font-size: 28px; }
         .nav-links { gap: 16px; }
         .benefits-grid { grid-template-columns: 1fr; }
+
+        /* Mobile Floating Buttons */
+        .mobile-floating-buttons {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          z-index: 1000;
+        }
+
+        .floating-btn {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .floating-btn:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-btn-call {
+          background: #{@palette[:primary]};
+          color: white;
+        }
+
+        .floating-btn-contact {
+          background: #{@palette[:card]};
+          color: #{@palette[:text]};
+          border: 1px solid #{@palette[:border]};
+        }
+      }
+
+      /* Hide floating buttons on desktop */
+      @media (min-width: 769px) {
+        .mobile-floating-buttons { display: none; }
       }
     CSS
   end

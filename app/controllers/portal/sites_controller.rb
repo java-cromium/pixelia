@@ -68,7 +68,7 @@ class Portal::SitesController < Portal::BaseController
 
   def configuration_params
     params.require(:site_configuration).permit(
-      :business_name, :industry, :tagline, :value_proposition,
+      :business_name, :industry, :phone_number, :tagline, :value_proposition,
       :about_content, :team_info, :video_url,
       :location_address, :location_lat, :location_lng,
       :service_area, :google_business_profile_url,
