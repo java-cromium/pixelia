@@ -73,7 +73,7 @@ class Portal::SitesController < Portal::BaseController
       :location_address, :location_lat, :location_lng,
       :service_area, :google_business_profile_url,
       :color_palette, :font_combo,
-      :hero_image, :logo_image, gallery_images: [],
+      :hero_image, :logo_image, :team_photo, gallery_images: [],
       services_list: [:name, :description],
       faqs: [:question, :answer]
     )

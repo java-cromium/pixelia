@@ -84,7 +84,7 @@ class AiChatService
       - Plan: #{@account.plan} (#{@account.subscription_status})
       - Sites: #{@account.sites.count}
       - Stores: #{@account.ecommerce_stores.count}
-      - Google Ads: #{@account.google_ad_account&.connected? ? "Connected" : "Not connected"}
+      - Google Ads: #{@account.google_ad_accounts.connected.any? ? "#{@account.google_ad_accounts.connected.count} account(s) connected" : "Not connected"}
       - Meta Ads: #{@account.meta_ad_account&.connected? ? "Connected" : "Not connected"}
 
       You can help with:

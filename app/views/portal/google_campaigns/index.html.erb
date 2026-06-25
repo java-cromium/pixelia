@@ -7,65 +7,213 @@
       <p class="mt-1 text-brand-text-light dark:text-slate-400">Manage your advertising campaigns.</p>
     </div>
     <div class="flex items-center gap-3">
-      <% if @google_account&.connected? %>
-        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          Connected as <%= @google_account.google_email %>
-        </span>
+      <% if @connected %>
+        <a href="<%= new_portal_google_campaign_path %>" class="px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl shadow-lg shadow-brand-highlight/20 hover:bg-brand-highlight-hover transition-colors">+ New Campaign</a>
       <% end %>
-      <a href="<%= new_portal_google_campaign_path %>" class="px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl shadow-lg shadow-brand-highlight/20 hover:bg-brand-highlight-hover transition-colors">+ New Campaign</a>
     </div>
   </div>
 
-  <% if @campaigns.any? %>
-    <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 overflow-hidden shadow-sm dark:shadow-none">
-      <table class="w-full">
-        <thead>
-          <tr class="text-left text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider bg-brand-card-alt dark:bg-slate-800 border-b border-brand-border dark:border-slate-700">
-            <th class="px-6 py-3">Campaign</th>
-            <th class="px-6 py-3">Type</th>
-            <th class="px-6 py-3">Status</th>
-            <th class="px-6 py-3">Budget</th>
-            <th class="px-6 py-3">Created</th>
-            <th class="px-6 py-3"></th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-brand-border dark:divide-slate-700/50">
-          <% @campaigns.each do |campaign| %>
-            <tr class="hover:bg-brand-card-alt dark:hover:bg-slate-700/30 transition-colors">
-              <td class="px-6 py-4">
-                <a href="<%= portal_google_campaign_path(campaign) %>" class="font-medium text-brand-text dark:text-slate-50 hover:text-brand-highlight dark:hover:text-cyan-400 transition-colors"><%= campaign.name %></a>
-                <% if campaign.synced? %>
-                  <p class="text-xs text-brand-text-light dark:text-slate-500 mt-0.5">ID: <%= campaign.google_campaign_id %></p>
-                <% end %>
-              </td>
-              <td class="px-6 py-4">
-                <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-300"><%= campaign.campaign_type.titleize %></span>
-              </td>
-              <td class="px-6 py-4">
-                <span class="inline-flex items-center gap-1.5 text-xs font-medium <%= campaign_status_class(campaign.status) %>">
-                  <span class="w-1.5 h-1.5 rounded-full <%= campaign_status_dot(campaign.status) %>"></span>
-                  <%= campaign.status.titleize %>
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm text-brand-text-muted dark:text-slate-300"><%= campaign.budget_display || "—" %></td>
-              <td class="px-6 py-4 text-sm text-brand-text-light dark:text-slate-400"><%= campaign.created_at.strftime("%b %d, %Y") %></td>
-              <td class="px-6 py-4 text-right">
-                <a href="<%= portal_google_campaign_path(campaign) %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">View</a>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+  <% if @connected %>
+    <!-- Linked Accounts -->
+    <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-6 mb-6 shadow-sm dark:shadow-none">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-bold text-brand-text dark:text-slate-50">Linked Google Ads Accounts</h2>
+        <button onclick="document.getElementById('add-account-panel').classList.toggle('hidden')" class="text-xs font-medium text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 transition-colors">+ Add Account</button>
+      </div>
+      <div class="space-y-2">
+        <% @google_accounts.each do |ga| %>
+          <div class="flex items-center justify-between p-3 rounded-lg bg-brand-card-alt dark:bg-slate-900/50 border border-brand-border/50 dark:border-slate-700/30">
+            <div class="flex items-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <div>
+                <p class="text-sm font-medium text-brand-text dark:text-slate-50"><%= ga.display_name %></p>
+                <p class="text-xs text-brand-text-light dark:text-slate-500">
+                  CID: <%= ga.formatted_customer_id || "—" %>
+                  <span class="ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium uppercase bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-400"><%= ga.connection_type %></span>
+                </p>
+              </div>
+            </div>
+            <%= button_to "Remove", portal_google_ads_disconnect_path(ga), method: :delete,
+                class: "text-xs text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-medium",
+                data: { turbo_confirm: "Remove this Google Ads account?" } %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Add Account Panel (hidden by default) -->
+      <div id="add-account-panel" class="hidden mt-4 pt-4 border-t border-brand-border dark:border-slate-700/50">
+        <div class="grid sm:grid-cols-3 gap-4">
+          <!-- OAuth -->
+          <div class="p-4 rounded-xl border border-brand-border dark:border-slate-700/50 bg-brand-bg dark:bg-slate-900/50 text-center">
+            <h3 class="text-xs font-semibold text-brand-text dark:text-slate-50 mb-2">Connect via Google</h3>
+            <p class="text-[11px] text-brand-text-light dark:text-slate-400 mb-3">Authorize with your Google account.</p>
+            <%= button_to "Connect with Google", "/auth/google_ads", method: :post,
+                data: { turbo: false },
+                class: "w-full px-3 py-2 bg-brand-highlight text-white text-xs font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors" %>
+          </div>
+
+          <!-- CID -->
+          <div class="p-4 rounded-xl border border-brand-border dark:border-slate-700/50 bg-brand-bg dark:bg-slate-900/50 sm:col-span-2">
+            <h3 class="text-xs font-semibold text-brand-text dark:text-slate-50 mb-2">Link by Customer ID (CID)</h3>
+            <%= form_with url: portal_google_ads_connect_cid_path, method: :post, class: "flex items-end gap-2" do |f| %>
+              <div class="flex-1">
+                <label class="block text-[11px] text-brand-text-light dark:text-slate-400 mb-1">10-digit CID</label>
+                <%= f.text_field :google_customer_id, placeholder: "123-456-7890", class: "w-full px-3 py-2 text-xs rounded-lg bg-brand-card-alt dark:bg-slate-800 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-brand-text-muted dark:placeholder-slate-500 focus:ring-2 focus:ring-brand-highlight focus:border-brand-highlight outline-none" %>
+              </div>
+              <div class="flex-1">
+                <label class="block text-[11px] text-brand-text-light dark:text-slate-400 mb-1">Nickname (optional)</label>
+                <%= f.text_field :nickname, placeholder: "e.g. Main Account", class: "w-full px-3 py-2 text-xs rounded-lg bg-brand-card-alt dark:bg-slate-800 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-brand-text-muted dark:placeholder-slate-500 focus:ring-2 focus:ring-brand-highlight focus:border-brand-highlight outline-none" %>
+              </div>
+              <%= f.submit "Link CID", class: "px-4 py-2 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-500 transition-colors cursor-pointer whitespace-nowrap" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% unless @connected %>
+    <!-- Connection Required -->
+    <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-10 shadow-sm dark:shadow-none">
+      <div class="max-w-2xl mx-auto text-center">
+        <div class="w-16 h-16 bg-brand-highlight/15 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-brand-highlight" viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+        </div>
+        <h2 class="text-2xl font-bold text-brand-text dark:text-slate-50 mb-2">Connect Your Google Ads Account</h2>
+        <p class="text-brand-text-light dark:text-slate-400 mb-8">To create and manage campaigns, connect an existing Google Ads account via OAuth or enter your 10-digit Customer ID (CID).</p>
+
+        <div class="grid sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
+          <!-- Connect via OAuth -->
+          <div class="p-6 rounded-xl border border-brand-border dark:border-slate-700/50 bg-brand-card-alt/50 dark:bg-slate-900/50 text-center">
+            <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+            </div>
+            <h3 class="font-semibold text-brand-text dark:text-slate-50 mb-2">Connect via Google</h3>
+            <p class="text-xs text-brand-text-light dark:text-slate-400 mb-4">Authorize with your Google account for full API access.</p>
+            <%= button_to "Connect with Google", "/auth/google_ads", method: :post,
+                data: { turbo: false },
+                class: "w-full px-4 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-lg hover:bg-brand-highlight-hover transition-colors" %>
+          </div>
+
+          <!-- Link by CID -->
+          <div class="p-6 rounded-xl border border-brand-border dark:border-slate-700/50 bg-brand-card-alt/50 dark:bg-slate-900/50 text-center">
+            <div class="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
+            </div>
+            <h3 class="font-semibold text-brand-text dark:text-slate-50 mb-2">Link by CID</h3>
+            <p class="text-xs text-brand-text-light dark:text-slate-400 mb-4">Enter your 10-digit Google Ads Customer ID manually.</p>
+            <%= form_with url: portal_google_ads_connect_cid_path, method: :post, class: "space-y-2", data: { turbo: false } do |f| %>
+              <%= f.text_field :google_customer_id, placeholder: "123-456-7890", class: "w-full px-3 py-2 text-sm rounded-lg bg-brand-card-alt dark:bg-slate-800 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-brand-text-muted dark:placeholder-slate-500 focus:ring-2 focus:ring-brand-highlight focus:border-brand-highlight outline-none text-center" %>
+              <%= f.submit "Link Account", class: "w-full px-4 py-2.5 bg-amber-600 text-white text-sm font-semibold rounded-lg hover:bg-amber-500 transition-colors cursor-pointer" %>
+            <% end %>
+          </div>
+
+          <!-- Create New Account -->
+          <div class="p-6 rounded-xl border border-brand-border dark:border-slate-700/50 bg-brand-card-alt/50 dark:bg-slate-900/50 text-center">
+            <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+            </div>
+            <h3 class="font-semibold text-brand-text dark:text-slate-50 mb-2">Create New Account</h3>
+            <p class="text-xs text-brand-text-light dark:text-slate-400 mb-4">Create a new Google Ads account under the Pixelia MCC.</p>
+            <%= button_to "Create & Connect", "/auth/google_ads", method: :post,
+                params: { create_under_mcc: true },
+                data: { turbo: false },
+                class: "w-full px-4 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-500 transition-colors" %>
+          </div>
+        </div>
+
+        <p class="mt-6 text-xs text-brand-text-light dark:text-slate-500">Both OAuth and CID connections provide full campaign management capabilities.</p>
+      </div>
     </div>
   <% else %>
-    <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-16 text-center shadow-sm dark:shadow-none">
-      <div class="w-16 h-16 bg-brand-highlight/15 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-8 h-8 text-brand-highlight dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+    <% if @campaigns.any? %>
+      <!-- Metrics Summary Cards -->
+      <% synced_campaigns = @campaigns.synced %>
+      <% if synced_campaigns.any? %>
+        <div class="grid sm:grid-cols-4 gap-4 mb-6">
+          <div class="bg-brand-card dark:bg-slate-800/50 rounded-xl border border-brand-border dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none">
+            <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider mb-1">Total Impressions</p>
+            <p class="text-2xl font-bold text-brand-text dark:text-slate-50"><%= number_with_delimiter(synced_campaigns.sum(&:impressions) || 0) %></p>
+          </div>
+          <div class="bg-brand-card dark:bg-slate-800/50 rounded-xl border border-brand-border dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none">
+            <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider mb-1">Total Clicks</p>
+            <p class="text-2xl font-bold text-brand-text dark:text-slate-50"><%= number_with_delimiter(synced_campaigns.sum(&:clicks) || 0) %></p>
+          </div>
+          <div class="bg-brand-card dark:bg-slate-800/50 rounded-xl border border-brand-border dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none">
+            <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider mb-1">Total Cost</p>
+            <p class="text-2xl font-bold text-brand-text dark:text-slate-50">$<%= number_with_precision((synced_campaigns.sum(&:cost_micros).to_f / 1_000_000), precision: 2) %></p>
+          </div>
+          <div class="bg-brand-card dark:bg-slate-800/50 rounded-xl border border-brand-border dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none">
+            <p class="text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider mb-1">Total Conversions</p>
+            <p class="text-2xl font-bold text-brand-text dark:text-slate-50"><%= number_with_delimiter(synced_campaigns.sum(&:conversions) || 0) %></p>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 overflow-hidden shadow-sm dark:shadow-none">
+        <table class="w-full">
+          <thead>
+            <tr class="text-left text-xs font-medium text-brand-text-light dark:text-slate-500 uppercase tracking-wider bg-brand-card-alt dark:bg-slate-800 border-b border-brand-border dark:border-slate-700">
+              <th class="px-6 py-3">Campaign</th>
+              <th class="px-6 py-3">Type</th>
+              <th class="px-6 py-3">Status</th>
+              <th class="px-6 py-3">Budget</th>
+              <th class="px-6 py-3 text-right">Impressions</th>
+              <th class="px-6 py-3 text-right">Clicks</th>
+              <th class="px-6 py-3 text-right">CTR</th>
+              <th class="px-6 py-3 text-right">Cost</th>
+              <th class="px-6 py-3 text-right">Conversions</th>
+              <th class="px-6 py-3"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border dark:divide-slate-700/50">
+            <% @campaigns.each do |campaign| %>
+              <tr class="hover:bg-brand-card-alt dark:hover:bg-slate-700/30 transition-colors">
+                <td class="px-6 py-4">
+                  <a href="<%= portal_google_campaign_path(campaign) %>" class="font-medium text-brand-text dark:text-slate-50 hover:text-brand-highlight dark:hover:text-cyan-400 transition-colors"><%= campaign.name %></a>
+                  <% if campaign.synced? %>
+                    <p class="text-xs text-brand-text-light dark:text-slate-500 mt-0.5">ID: <%= campaign.google_campaign_id %></p>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-brand-card-alt dark:bg-slate-700 text-brand-text-muted dark:text-slate-300"><%= campaign.campaign_type.titleize %></span>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-medium <%= campaign_status_class(campaign.status) %>">
+                    <span class="w-1.5 h-1.5 rounded-full <%= campaign_status_dot(campaign.status) %>"></span>
+                    <%= campaign.status.titleize %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-sm text-brand-text-muted dark:text-slate-300"><%= campaign.budget_display || "—" %></td>
+                <td class="px-6 py-4 text-sm text-brand-text-muted dark:text-slate-300 text-right"><%= campaign.impressions ? campaign.impressions.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse : "—" %></td>
+                <td class="px-6 py-4 text-sm text-brand-text-muted dark:text-slate-300 text-right"><%= campaign.clicks ? campaign.clicks.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse : "—" %></td>
+                <td class="px-6 py-4 text-sm text-brand-text-muted dark:text-slate-300 text-right"><%= campaign.has_metrics? ? "#{campaign.ctr}%" : "—" %></td>
+                <td class="px-6 py-4 text-sm text-brand-text-muted dark:text-slate-300 text-right"><%= campaign.cost_display || "—" %></td>
+                <td class="px-6 py-4 text-sm text-brand-text-muted dark:text-slate-300 text-right"><%= campaign.conversions ? campaign.conversions.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse : "—" %></td>
+                <td class="px-6 py-4 text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <% if campaign.synced? %>
+                      <%= button_to "Sync Metrics", sync_metrics_portal_google_campaign_path(campaign), method: :post,
+                          class: "text-xs text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium",
+                          form: { data: { turbo: true } } %>
+                    <% end %>
+                    <a href="<%= portal_google_campaign_path(campaign) %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">View</a>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
-      <h3 class="text-lg font-semibold text-brand-text dark:text-slate-50">No campaigns yet</h3>
-      <p class="mt-2 text-brand-text-light dark:text-slate-500 text-sm mb-6">Create your first Google Ads campaign to start driving traffic.</p>
-      <a href="<%= new_portal_google_campaign_path %>" class="inline-flex px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl shadow-lg shadow-brand-highlight/20 hover:bg-brand-highlight-hover transition-colors">+ Create First Campaign</a>
-    </div>
+    <% else %>
+      <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 p-16 text-center shadow-sm dark:shadow-none">
+        <div class="w-16 h-16 bg-brand-highlight/15 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-brand-highlight dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-brand-text dark:text-slate-50">No campaigns yet</h3>
+        <p class="mt-2 text-brand-text-light dark:text-slate-500 text-sm mb-6">Create your first Google Ads campaign to start driving traffic.</p>
+        <a href="<%= new_portal_google_campaign_path %>" class="inline-flex px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl shadow-lg shadow-brand-highlight/20 hover:bg-brand-highlight-hover transition-colors">+ Create First Campaign</a>
+      </div>
+    <% end %>
   <% end %>
 </div>

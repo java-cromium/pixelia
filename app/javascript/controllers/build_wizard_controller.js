@@ -3,7 +3,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "step", "indicator", "prevBtn", "nextBtn", "submitBtn",
-    "taglineField", "valuePropositionField", "aboutField", "teamInfoField"
+    "taglineField", "valuePropositionField", "aboutField", "teamInfoField",
+    "darkPaletteGrid", "lightPaletteGrid", "darkTabBtn", "lightTabBtn"
   ]
   static values = {
     current: { type: Number, default: 0 },
@@ -65,6 +66,25 @@ export default class extends Controller {
     if (this.hasSubmitBtnTarget) {
       this.submitBtnTarget.style.display = index === this.totalSteps - 1 ? "inline-flex" : "none"
     }
+  }
+
+  // ─── PALETTE TABS ──────────────────────────────────────────
+
+  switchPaletteTab(event) {
+    const tab = event.currentTarget.dataset.tab
+    const isDark = tab === "dark"
+
+    if (this.hasDarkPaletteGridTarget) this.darkPaletteGridTarget.classList.toggle("hidden", !isDark)
+    if (this.hasLightPaletteGridTarget) this.lightPaletteGridTarget.classList.toggle("hidden", isDark)
+
+    const active = ["bg-brand-highlight", "text-white"]
+    const inactive = ["text-brand-text-light", "dark:text-slate-400"]
+
+    ;[this.darkTabBtnTarget, this.lightTabBtnTarget].forEach(btn => {
+      const isActive = (btn === this.darkTabBtnTarget) === isDark
+      active.forEach(c => btn.classList.toggle(c, isActive))
+      inactive.forEach(c => btn.classList.toggle(c, !isActive))
+    })
   }
 
   // ─── AI CONTENT GENERATION ──────────────────────────────────

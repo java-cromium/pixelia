@@ -6,7 +6,13 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       scope: "email,profile,https://www.googleapis.com/auth/adwords",
       access_type: "offline",
       prompt: "consent",
-      name: "google_ads"
+      name: "google_ads",
+      setup: lambda { |env|
+        request = Rack::Request.new(env)
+        if request.params["create_under_mcc"].present?
+          env["rack.session"][:create_under_mcc] = true
+        end
+      }
     }
 
   provider :facebook,
@@ -20,5 +26,5 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     }
 end
 
-OmniAuth.config.allowed_request_methods = [:post]
+OmniAuth.config.allowed_request_methods = [:get, :post]
 OmniAuth.config.silence_get_warning = true

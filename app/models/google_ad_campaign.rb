@@ -12,6 +12,7 @@ class GoogleAdCampaign < ApplicationRecord
 
   scope :active, -> { where(status: %w[enabled paused]) }
   scope :by_type, ->(type) { where(campaign_type: type) }
+  scope :synced, -> { where.not(google_campaign_id: nil) }
 
   def budget_display
     return nil unless budget_amount_micros
@@ -24,5 +25,24 @@ class GoogleAdCampaign < ApplicationRecord
 
   def draft?
     status == "draft"
+  end
+
+  def cost_display
+    return nil unless cost_micros
+    "$#{'%.2f' % (cost_micros / 1_000_000.0)}"
+  end
+
+  def ctr
+    return 0 unless clicks&.positive? && impressions&.positive?
+    (clicks.to_f / impressions * 100).round(2)
+  end
+
+  def cpc
+    return 0 unless clicks&.positive? && cost_micros
+    (cost_micros.to_f / clicks / 1_000_000).round(2)
+  end
+
+  def has_metrics?
+    metrics_synced_at.present?
   end
 end

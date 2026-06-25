@@ -12,7 +12,7 @@ module AdminHelper
     active = request.path.start_with?(path) || (key == "dashboard" && request.path == admin_root_path)
     icon_path = ADMIN_NAV_ICONS[key]
 
-    link_to path, class: "flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors #{active ? 'text-slate-50 bg-indigo-600 shadow-lg shadow-indigo-600/20' : 'text-slate-400 hover:text-slate-50 hover:bg-slate-800'}" do
+    link_to path, class: "flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors #{active ? 'font-semibold text-brand-highlight dark:text-cyan-400 bg-brand-highlight/10 dark:bg-cyan-500/10' : 'text-brand-text-muted dark:text-slate-400 hover:text-brand-highlight dark:hover:text-cyan-400 hover:bg-brand-card-alt dark:hover:bg-slate-800'}" do
       raw("<svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>#{icon_path}</svg>") +
         content_tag(:span, label)
     end

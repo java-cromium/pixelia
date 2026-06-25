@@ -162,6 +162,7 @@ class SiteGeneratorService
     @service_area = @config&.service_area.presence
     @google_maps_url = @config&.google_business_profile_url.presence
     @hero_image_url = @config&.hero_image&.attached? ? rails_blob_path(@config.hero_image, only_path: true) : nil
+    @team_photo_url = @config&.team_photo&.attached? ? rails_blob_path(@config.team_photo, only_path: true) : nil
     @gallery_image_urls = @config&.gallery_images&.attached? ? @config.gallery_images.map { |img| rails_blob_path(img, only_path: true) } : []
     @logo_url = @config&.logo_image&.attached? ? rails_blob_path(@config.logo_image, only_path: true) : nil
     # Base path for internal links (preview mode vs custom domain)
@@ -263,12 +264,23 @@ class SiteGeneratorService
   def build_about_html
     about_text = @about_content.presence || "With years of experience in the industry, we've helped hundreds of businesses achieve their goals. Our team of experts combines creativity with technical expertise to deliver results that matter.\n\nWe believe in building long-term partnerships with our clients, providing ongoing support and innovative solutions that evolve with your business."
 
-    team_section = if @team_info.present?
+    team_photo_html = if @team_photo_url.present?
+      <<~HTML
+        <div style="text-align: center; margin-bottom: 32px;">
+          <img src="#{@team_photo_url}" alt="Our Team" style="width: 100%; max-width: 700px; height: auto; border-radius: 16px; object-fit: cover; max-height: 400px;">
+        </div>
+      HTML
+    else
+      ""
+    end
+
+    team_section = if @team_info.present? || @team_photo_url.present?
       <<~HTML
         <section class="services-section">
           <div class="section-container">
             <h2 class="section-title" style="text-align: center;">Our Team</h2>
-            <p class="about-desc" style="max-width: 700px; margin: 0 auto; text-align: center;">#{@team_info}</p>
+            #{team_photo_html}
+            #{"<p class=\"about-desc\" style=\"max-width: 700px; margin: 0 auto; text-align: center;\">#{@team_info}</p>" if @team_info.present?}
           </div>
         </section>
       HTML
@@ -425,8 +437,8 @@ class SiteGeneratorService
       HTML
     elsif @hero_image_url.present?
       <<~HTML
-        <div class="hero-image" style="margin-top: 48px; text-align: center;">
-          <img src="#{@hero_image_url}" alt="#{@business_name}" style="max-width: 800px; width: 100%; height: auto; border-radius: 16px; object-fit: cover; max-height: 450px;">
+        <div class="hero-image" style="width: 100%; margin: 48px 0 0;">
+          <img src="#{@hero_image_url}" alt="#{@business_name}" style="width: 100%; height: auto; border-radius: 16px; object-fit: cover; max-height: 560px;">
         </div>
       HTML
     else
@@ -435,6 +447,7 @@ class SiteGeneratorService
 
     <<~HTML
       <section class="hero-section">
+        #{media_embed}
         <div class="hero-content">
           <h1 class="hero-title">#{@business_name}</h1>
           <p class="hero-tagline">#{@tagline}</p>
@@ -443,7 +456,6 @@ class SiteGeneratorService
             <a href="#{@base_path}/contact" class="btn-primary">Get Started</a>
             <a href="#{@base_path}/services" class="btn-secondary">Our Services</a>
           </div>
-          #{media_embed}
         </div>
       </section>
     HTML
@@ -800,12 +812,12 @@ class SiteGeneratorService
 
       /* Hero */
       .hero-section {
-        padding: 160px 24px 100px;
+        padding: 160px 0 100px;
         text-align: center;
         background: linear-gradient(180deg, #{@palette[:bg]} 0%, #{@palette[:card]} 100%);
       }
 
-      .hero-content { max-width: 800px; margin: 0 auto; }
+      .hero-content { max-width: 800px; margin: 0 auto; padding: 0 24px; }
 
       .hero-title {
         font-family: '#{@fonts[:heading]}', sans-serif;

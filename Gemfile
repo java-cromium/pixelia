@@ -63,7 +63,7 @@ gem "stripe", "~> 12.0"
 gem "pundit"
 
 # Google Ads API
-gem "google-ads-googleads", "~> 31.0"
+gem "google-ads-googleads", "~> 42.0"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 
@@ -73,6 +73,9 @@ gem "omniauth-facebook"
 
 # AI Chat Support
 gem "ruby-openai", "~> 7.0"
+
+# Generic OAuth2 for custom AI providers
+gem "omniauth-oauth2"
 
 # Charts & analytics
 gem "chartkick"
@@ -85,6 +88,9 @@ gem "pagy", "~> 9.0"
 gem "minitest", "~> 5.25"
 
 group :development, :test do
+  # Load environment variables from .env file
+  gem "dotenv-rails"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 

@@ -15,7 +15,7 @@ export default class extends Controller {
   }
 
   applyTheme() {
-    const theme = localStorage.getItem("pixelia_theme") || "dark"
+    const theme = localStorage.getItem("pixelia_theme") || "light"
     if (theme === "dark") {
       document.documentElement.classList.add("dark")
     } else {

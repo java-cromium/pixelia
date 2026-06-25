@@ -3,6 +3,7 @@ class SiteConfiguration < ApplicationRecord
 
   has_one_attached :hero_image
   has_one_attached :logo_image
+  has_one_attached :team_photo
   has_many_attached :gallery_images
 
   after_commit :compress_logo_if_oversize, if: -> { logo_image.attached? }
@@ -33,6 +34,15 @@ class SiteConfiguration < ApplicationRecord
       end
       if hero_image.byte_size > 5.megabytes
         errors.add(:hero_image, "must be less than 5MB")
+      end
+    end
+
+    if team_photo.attached?
+      unless team_photo.content_type.in?(%w[image/jpeg image/png image/webp])
+        errors.add(:team_photo, "must be a JPEG, PNG, or WebP")
+      end
+      if team_photo.byte_size > 5.megabytes
+        errors.add(:team_photo, "must be less than 5MB")
       end
     end
 

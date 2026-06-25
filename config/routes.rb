@@ -60,11 +60,13 @@ Rails.application.routes.draw do
           post :sync
           post :pause
           post :enable
+          post :sync_metrics
         end
       end
       get  "auth/google_ads/callback", to: "google_ads_oauth#callback", as: nil
       get  "auth/google_ads/failure",  to: "google_ads_oauth#failure", as: nil
-      delete "google_ads/disconnect",  to: "google_ads_oauth#destroy", as: nil
+      post "google_ads/connect_cid",   to: "google_ads_oauth#connect_cid", as: nil
+      delete "google_ads/:id/disconnect", to: "google_ads_oauth#destroy", as: nil
 
       # Meta Ads
       resources :meta_campaigns, controller: "meta_campaigns", as: nil do
@@ -144,11 +146,13 @@ Rails.application.routes.draw do
         post :sync
         post :pause
         post :enable
+        post :sync_metrics
       end
     end
     get  "auth/google_ads/callback", to: "google_ads_oauth#callback", as: :google_ads_callback
     get  "auth/google_ads/failure",  to: "google_ads_oauth#failure", as: :google_ads_failure
-    delete "google_ads/disconnect",  to: "google_ads_oauth#destroy", as: :google_ads_disconnect
+    post "google_ads/connect_cid",   to: "google_ads_oauth#connect_cid", as: :google_ads_connect_cid
+    delete "google_ads/:id/disconnect", to: "google_ads_oauth#destroy", as: :google_ads_disconnect
 
     # Meta Ads
     resources :meta_campaigns, controller: "meta_campaigns" do

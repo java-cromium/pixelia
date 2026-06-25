@@ -2,14 +2,14 @@
 
 <div class="p-8">
   <div class="flex items-center justify-between mb-8">
-    <h1 class="text-3xl font-bold text-slate-50">E-Commerce Stores</h1>
-    <a href="<%= new_admin_ecommerce_store_path %>" class="px-5 py-2.5 bg-indigo-600 text-slate-50 text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-colors">+ New Store</a>
+    <h1 class="text-3xl font-bold text-brand-text dark:text-slate-50">E-Commerce Stores</h1>
+    <a href="<%= new_admin_ecommerce_store_path %>" class="px-5 py-2.5 bg-brand-highlight text-white text-sm font-semibold rounded-xl shadow-lg shadow-brand-highlight/20 hover:bg-brand-highlight-hover transition-colors">+ New Store</a>
   </div>
 
-  <div class="bg-slate-800/50 rounded-2xl border border-slate-700/50 overflow-hidden" data-controller="search filter">
-    <div class="px-6 py-4 border-b border-slate-700/50 flex items-center gap-4">
-      <input type="text" placeholder="Search stores..." data-search-target="input" data-action="input->search#filter" class="flex-1 px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
-      <select data-filter-target="select" data-action="change->filter#apply" class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-50 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+  <div class="bg-brand-card dark:bg-slate-800/50 rounded-2xl border border-brand-border dark:border-slate-700/50 overflow-hidden" data-controller="search filter">
+    <div class="px-6 py-4 border-b border-brand-border dark:border-slate-700/50 flex items-center gap-4">
+      <input type="text" placeholder="Search stores..." data-search-target="input" data-action="input->search#filter" class="flex-1 px-4 py-2 rounded-lg bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 placeholder-brand-text-muted dark:placeholder-slate-500 text-sm focus:ring-2 focus:ring-brand-highlight focus:border-brand-highlight outline-none">
+      <select data-filter-target="select" data-action="change->filter#apply" class="px-4 py-2 rounded-lg bg-brand-card-alt dark:bg-slate-900 border border-brand-border dark:border-slate-700 text-brand-text dark:text-slate-50 text-sm focus:ring-2 focus:ring-brand-highlight outline-none">
         <option value="all">All Platforms</option>
         <option value="shopify">Shopify</option>
         <option value="woocommerce">WooCommerce</option>
@@ -17,7 +17,7 @@
     </div>
     <table class="w-full">
       <thead>
-        <tr class="text-left text-xs font-medium text-slate-500 uppercase tracking-wider bg-slate-800 border-b border-slate-700">
+        <tr class="text-left text-xs font-medium text-brand-text-muted dark:text-slate-500 uppercase tracking-wider bg-brand-card-alt dark:bg-slate-800 border-b border-brand-border dark:border-slate-700">
           <th class="px-6 py-3">Platform</th>
           <th class="px-6 py-3">Store URL</th>
           <th class="px-6 py-3">Account</th>
@@ -25,25 +25,25 @@
           <th class="px-6 py-3"></th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-slate-700/50" data-search-target="body" data-filter-target="body">
+      <tbody class="divide-y divide-brand-border dark:divide-slate-700/50" data-search-target="body" data-filter-target="body">
         <% @stores.each do |store| %>
-          <tr class="hover:bg-slate-700/30 transition-colors" data-filter-value="<%= store.platform %>">
+          <tr class="hover:bg-brand-card-alt dark:hover:bg-slate-700/30 transition-colors" data-filter-value="<%= store.platform %>">
             <td class="px-6 py-4">
-              <span class="inline-flex items-center gap-2 font-medium text-slate-50">
-                <span class="w-2 h-2 rounded-full <%= store.platform == 'shopify' ? 'bg-emerald-400' : 'bg-indigo-400' %>"></span>
+              <span class="inline-flex items-center gap-2 font-medium text-brand-text dark:text-slate-50">
+                <span class="w-2 h-2 rounded-full <%= store.platform == 'shopify' ? 'bg-emerald-500' : 'bg-brand-highlight dark:bg-indigo-400' %>"></span>
                 <%= store.platform.capitalize %>
               </span>
             </td>
-            <td class="px-6 py-4 text-slate-400 text-sm"><%= store.store_url %></td>
-            <td class="px-6 py-4 text-slate-400"><%= store.account&.name %></td>
+            <td class="px-6 py-4 text-brand-text-light dark:text-slate-400 text-sm"><%= store.store_url %></td>
+            <td class="px-6 py-4 text-brand-text-light dark:text-slate-400"><%= store.account&.name %></td>
             <td class="px-6 py-4">
-              <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= store.connected? ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-500/15 text-amber-400' %>">
+              <span class="text-xs font-medium px-2.5 py-1 rounded-full <%= store.connected? ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/15 text-amber-600 dark:text-amber-400' %>">
                 <%= store.connected? ? "Connected" : "Keys Missing" %>
               </span>
             </td>
             <td class="px-6 py-4 text-right space-x-3">
-              <a href="<%= admin_ecommerce_store_path(store) %>" class="text-sm text-cyan-400 hover:text-cyan-300 font-medium">View</a>
-              <a href="<%= edit_admin_ecommerce_store_path(store) %>" class="text-sm text-slate-400 hover:text-slate-300 font-medium">Edit</a>
+              <a href="<%= admin_ecommerce_store_path(store) %>" class="text-sm text-brand-highlight dark:text-cyan-400 hover:text-brand-highlight-hover dark:hover:text-cyan-300 font-medium">View</a>
+              <a href="<%= edit_admin_ecommerce_store_path(store) %>" class="text-sm text-brand-text-muted dark:text-slate-400 hover:text-brand-text-light dark:hover:text-slate-300 font-medium">Edit</a>
             </td>
           </tr>
         <% end %>

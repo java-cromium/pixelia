@@ -33,3 +33,4 @@ application.register("chat", ChatController)
 
 import BuildWizardController from "./build_wizard_controller"
 application.register("build-wizard", BuildWizardController)
+

@@ -6,7 +6,7 @@ class Account < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :sites, dependent: :destroy
   has_many :ecommerce_stores, dependent: :destroy
-  has_one  :google_ad_account, dependent: :destroy
+  has_many :google_ad_accounts, dependent: :destroy
   has_many :google_ad_campaigns, dependent: :destroy
   has_one  :meta_ad_account, dependent: :destroy
   has_many :meta_ad_campaigns, dependent: :destroy

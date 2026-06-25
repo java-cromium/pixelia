@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_03_163310) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_23_171523) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -26,6 +26,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_163310) do
     t.datetime "trial_ends_at"
     t.string "ai_provider"
     t.text "ai_api_key"
+    t.string "ai_auth_method"
+    t.text "google_ai_access_token"
+    t.text "openai_access_token"
+    t.text "claude_access_token"
     t.index ["plan"], name: "index_accounts_on_plan"
     t.index ["stripe_customer_id"], name: "index_accounts_on_stripe_customer_id", unique: true
   end
@@ -101,7 +105,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_163310) do
     t.string "status", default: "connected", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_google_ad_accounts_on_account_id", unique: true
+    t.string "connection_type", default: "oauth", null: false
+    t.string "nickname"
+    t.index ["account_id", "google_customer_id"], name: "idx_google_ad_accounts_on_account_and_customer", unique: true
+    t.index ["account_id"], name: "index_google_ad_accounts_on_account_id"
     t.index ["google_customer_id"], name: "index_google_ad_accounts_on_google_customer_id"
   end
 
@@ -120,6 +127,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_03_163310) do
     t.datetime "last_synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "impressions"
+    t.integer "clicks"
+    t.integer "cost_micros"
+    t.integer "conversions"
+    t.datetime "metrics_synced_at"
     t.index ["account_id", "status"], name: "index_google_ad_campaigns_on_account_id_and_status"
     t.index ["account_id"], name: "index_google_ad_campaigns_on_account_id"
     t.index ["google_ad_account_id"], name: "index_google_ad_campaigns_on_google_ad_account_id"

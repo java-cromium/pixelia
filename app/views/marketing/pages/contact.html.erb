@@ -1,21 +1,21 @@
 <% content_for(:title) { "Contacto — Pixelia" } %>
 
 <!-- Contact Hero -->
-<section class="relative bg-slate-900 py-24 overflow-hidden">
+<section class="relative bg-brand-bg py-24 overflow-hidden">
   <div class="absolute inset-0">
-    <div class="absolute bottom-0 left-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute top-10 right-10 w-72 h-72 bg-indigo-600/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-20 w-80 h-80 bg-brand-highlight/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-10 right-10 w-72 h-72 bg-brand-highlight/10 rounded-full blur-3xl"></div>
   </div>
   <div class="relative max-w-7xl mx-auto px-6 text-center">
-    <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-slate-50">¿Listo para transformar tu presencia digital?</h1>
-    <p class="mt-6 text-lg text-slate-400 max-w-2xl mx-auto">
+    <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-brand-text">¿Listo para transformar tu presencia digital?</h1>
+    <p class="mt-6 text-lg text-brand-text-light max-w-2xl mx-auto">
       Cuéntanos sobre tu proyecto. Te responderemos en menos de 24 horas con una propuesta de valor.
     </p>
   </div>
 </section>
 
 <!-- Contact Form -->
-<section class="bg-slate-900 py-24 border-t border-slate-800">
+<section class="bg-brand-bg py-24 border-t border-brand-border">
   <div class="max-w-2xl mx-auto px-6">
 
     <% if notice.present? %>
@@ -30,28 +30,28 @@
       </div>
     <% end %>
 
-    <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-8">
+    <div class="bg-brand-card-alt/50 border border-brand-border rounded-2xl p-8">
       <%= form_with model: Lead.new, url: leads_path, class: "space-y-6" do |f| %>
 
         <div>
-          <label for="lead_first_name" class="block text-sm font-semibold text-slate-300 mb-2">Tu Nombre</label>
-          <%= f.text_field :first_name, placeholder: "Juan Pérez", class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+          <label for="lead_first_name" class="block text-sm font-semibold text-brand-text-muted mb-2">Tu Nombre</label>
+          <%= f.text_field :first_name, placeholder: "Juan Pérez", class: "w-full px-4 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder-brand-text-light focus:ring-2 focus:ring-brand-highlight focus:border-brand-highlight outline-none transition-shadow" %>
         </div>
 
         <div>
-          <label for="lead_email" class="block text-sm font-semibold text-slate-300 mb-2">Correo Electrónico</label>
-          <%= f.email_field :email, placeholder: "juan@empresa.com", class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+          <label for="lead_email" class="block text-sm font-semibold text-brand-text-muted mb-2">Correo Electrónico</label>
+          <%= f.email_field :email, placeholder: "juan@empresa.com", class: "w-full px-4 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text placeholder-brand-text-light focus:ring-2 focus:ring-brand-highlight focus:border-brand-highlight outline-none transition-shadow" %>
         </div>
 
         <div>
-          <label for="lead_project_type" class="block text-sm font-semibold text-slate-300 mb-2">Tipo de Proyecto</label>
-          <%= f.select :project_type, options_for_select(["Sitio Web", "Tienda Online (E-Commerce)", "Campaña SEO", "Publicidad Digital", "Paquete 360° Completo"]), { include_blank: "Selecciona un servicio..." }, class: "w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-50 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow" %>
+          <label for="lead_project_type" class="block text-sm font-semibold text-brand-text-muted mb-2">Tipo de Proyecto</label>
+          <%= f.select :project_type, options_for_select(["Sitio Web", "Tienda Online (E-Commerce)", "Campaña SEO", "Publicidad Digital", "Paquete 360° Completo"]), { include_blank: "Selecciona un servicio..." }, class: "w-full px-4 py-3 rounded-xl bg-brand-bg border border-brand-border text-brand-text focus:ring-2 focus:ring-brand-highlight focus:border-brand-highlight outline-none transition-shadow" %>
         </div>
 
         <%= f.hidden_field :status, value: "new" %>
 
         <div class="pt-2">
-          <%= f.submit "Enviar Solicitud", class: "w-full px-8 py-4 bg-indigo-600 text-slate-50 font-semibold rounded-xl shadow-lg shadow-indigo-600/25 hover:bg-indigo-500 hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-200 cursor-pointer" %>
+          <%= f.submit "Enviar Solicitud", class: "w-full px-8 py-4 bg-brand-highlight text-white font-semibold rounded-xl shadow-lg shadow-brand-highlight/25 hover:bg-brand-highlight-hover hover:shadow-xl hover:shadow-brand-highlight/30 transition-all duration-200 cursor-pointer" %>
         </div>
       <% end %>
     </div>
